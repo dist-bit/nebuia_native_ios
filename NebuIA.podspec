@@ -1,9 +1,9 @@
 Pod::Spec.new do |s|
   s.name          = "NebuIA"
-  s.version       = "0.0.8"
-  s.summary       = "iOS SDK for NebuIA description"
-  s.description   = "iOS SDK for NebuIA"
-  s.homepage      = "https://github.com/dist-bit/nebuia_native_ios/"
+  s.version       = "0.0.1"
+  s.summary       = "iOS SDK for NebuIA"
+  s.description   = "iOS SDK for NebuIA SDK"
+  s.homepage      = "https://github.com/dist-bit/nebuia_native_ios"
   s.license       = "MIT"
   s.author        = "xellDart"
   s.platform      = :ios, "12.0"
