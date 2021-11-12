@@ -1,0 +1,312 @@
+//
+//  Client.swift
+//  NebuIA
+//
+//  Created by Miguel on 21/06/21.
+//
+
+import UIKit
+
+public class Client {
+    private var base: String = "http://192.168.1.101:3000/api/v1/services/"
+    private var boundary = String(format: "----iOSURLSessionBoundary.%08x%08x", arc4random(), arc4random())
+    
+    var apiKey: String;
+    var apiSecret: String;
+    var code: String = "";
+    var report: String = "";
+    
+    init(publicKey: String, secretKey: String) {
+        self.apiKey = publicKey
+        self.apiSecret = secretKey
+    }
+    
+    func setCode(passcode: String) {
+        self.code = passcode
+    }
+    
+    func createReport(completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)report")!
+        var request = URLRequest(url: url)
+        request.emptyPOST(apiKey: apiKey, apiSecret: apiSecret, code: code)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func faceScanner(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)face?report=\(report)")!
+        var request = URLRequest(url: url)
+        guard let imageData = image.jpegData(compressionQuality: 100.0) else {
+            return
+        }
+        
+        var body = Data()
+        body.imageBody(image: imageData, boundary: boundary, filename: "face")
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)
+        let session = URLSession(configuration: .default)
+        let task = session.uploadTask(with: request,from: body) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func getIDImage(side: SIDE, completion: @escaping (_ data: UIImage?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)docs/\(String(describing: side))?report=\(report)")!
+        var request = URLRequest(url: url)
+        request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let image = UIImage(data: data)
+            completion(image, error)
+        }
+        task.resume()
+    }
+    
+    func uploadID(front: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)crop?report=\(report)")!
+        var request = URLRequest(url: url)
+        guard let imageData = front.jpegData(compressionQuality: 100.0) else {
+            return
+        }
+        
+        var body = Data()
+        body.imageBody(image: imageData, boundary: boundary, filename: "front")
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.uploadTask(with: request,from: body) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func uploadID(front: UIImage, back: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)id?report=\(report)")!
+        var request = URLRequest(url: url)
+        
+        guard let frontData = front.jpegData(compressionQuality: 100.0) else {
+            return
+        }
+        
+        guard let backData = back.jpegData(compressionQuality: 100.0) else {
+            return
+        }
+        
+        var body = Data()
+        // put images
+        body.imageBody(image: frontData, boundary: boundary, filename: "front")
+        body.imageBody(image: backData, boundary: boundary, filename: "back")
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.uploadTask(with: request,from: body) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func uploadAddressImage(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)address?report=\(report)")!
+        var request = URLRequest(url: url)
+        guard let imageData = image.jpegData(compressionQuality: 100.0) else {
+            return
+        }
+        
+        var body = Data()
+        body.imageBody(image: imageData, boundary: boundary, filename: "document")
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.uploadTask(with: request,from: body) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func uploadAddressPDF(pdf: Data, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)address?report=\(report)")!
+        var request = URLRequest(url: url)
+        
+        var body = Data()
+        body.fileBody(image: pdf, boundary: boundary, filename: "document")
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.uploadTask(with: request,from: body) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func fingerprints(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)fingerprints?report=\(report)")!
+        var request = URLRequest(url: url)
+        guard let imageData = image.jpegData(compressionQuality: 100.0) else {
+            return
+        }
+        
+        var body = Data()
+        body.imageBody(image: imageData, boundary: boundary, filename: "image")
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)
+        let session = URLSession(configuration: .default)
+        let task = session.uploadTask(with: request,from: body) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func fingerprintNfiq(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)nfiq?report=\(report)")!
+        var request = URLRequest(url: url)
+        guard let imageData = image.jpegData(compressionQuality: 100.0) else {
+            return
+        }
+        
+        var body = Data()
+        body.imageBody(image: imageData, boundary: boundary, filename: "front")
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)
+        let session = URLSession(configuration: .default)
+        let task = session.uploadTask(with: request,from: body) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func getFaceImage(completion: @escaping (_ data: UIImage?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)faces/?report=\(report)")!
+        var request = URLRequest(url: url)
+        request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let image = UIImage(data: data)
+            completion(image, error)
+        }
+        task.resume()
+    }
+    
+    func getReportSummary(completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)report/?report=\(report)")!
+        var request = URLRequest(url: url)
+        request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func getFingerprintWSQ(image: UIImage, completion: @escaping (_ data: Data?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)wsq?report=\(report)")!
+        var request = URLRequest(url: url)
+        guard let imageData = image.jpegData(compressionQuality: 100.0) else {
+            return
+        }
+        
+        var body = Data()
+        body.imageBody(image: imageData, boundary: boundary, filename: "front")
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)
+        let session = URLSession(configuration: .default)
+        let task = session.uploadTask(with: request,from: body) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+
+            completion(data, error)
+        }
+        task.resume()
+    }
+}
