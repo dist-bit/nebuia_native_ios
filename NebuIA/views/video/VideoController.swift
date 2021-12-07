@@ -10,7 +10,7 @@ import AVKit
 import AVFoundation
 import Cartography
 
-public class SignerController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
+public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     
     private var audioDevice: AVCaptureDevice!
     private var captureSession: AVCaptureSession!
@@ -63,7 +63,7 @@ public class SignerController: UIViewController, AVCaptureVideoDataOutputSampleB
     
     private var detections_count: [Int] = []
     
-    var onCompleteSign : ((UIImage) -> Void)?
+    var onCompleteVideo : ((String) -> Void)?
     
     @IBAction func analyseID(_ sender: UIButton) {
         setActionText(text: "Por favor muestra la parte frontal de tu identificación oficial INE/IFE", action: "Esperando parte frontal de tu ID")
@@ -366,14 +366,6 @@ public class SignerController: UIViewController, AVCaptureVideoDataOutputSampleB
         }
     }
     
-    private func onCompleteUpload(index: UIImage, middle: UIImage, ring: UIImage, little: UIImage) {
-        self.complete = true
-        self.onCompleteSign!(index)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.back()
-        }
-    }
-    
     private func back() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.dismiss(animated: true, completion: nil)
@@ -468,11 +460,16 @@ public class SignerController: UIViewController, AVCaptureVideoDataOutputSampleB
                 backCount += 1
                 
                 if backCount > 40 {
-                    setActionText(text: "Proceso finalizado, ahora firma la petición", action: "Esperando firma")
+                    setActionText(text: "Proceso finalizado, espera por favot", action: "Proceso finalizado")
                     scanBackComplete = true;
                     scanBack = false;
+                   
+                    self.stop { data in
+                        self.onCompleteVideo!(data!)
+                        self.back()
+                    }
                     
-                    self.stop()
+                    
                 }
             }
         }
@@ -484,27 +481,6 @@ public class SignerController: UIViewController, AVCaptureVideoDataOutputSampleB
             self.action_label.text = action
             Vibration.success.vibrate()
         }
-    }
-    
-    private func getImageFromBase64(b64: String) -> UIImage {
-        let dataDecoded : Data = Data(base64Encoded: b64, options: .ignoreUnknownCharacters)!
-        return UIImage(data: dataDecoded)!
-    }
-    
-    private func previewResult(fingers: [Finger]) {
-        let preview: FingerprintPreviewController = FingerprintPreviewController()
-        preview.onCompleteBlock = self.onCompleteUpload
-        preview.onDismmisBlock = self.onPreviewDissmis
-        preview.fingers =  fingers
-        preview.client = self.client
-        self.present(preview, animated: true, completion: nil)
-    }
-    
-    
-    private func convertBase64StringToImage (b64:String) -> UIImage {
-        let imageData = Data.init(base64Encoded: b64, options: .init(rawValue: 0))
-        let image = UIImage(data: imageData!)
-        return image!
     }
     
     private func setupWriter() {

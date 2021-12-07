@@ -8,7 +8,7 @@
 import UIKit
 
 public class Client {
-    private var base: String = "http://192.168.1.101:3000/api/v1/services/"
+    private var base: String = "https://api.nebuia.com/api/v1/services/"
     private var boundary = String(format: "----iOSURLSessionBoundary.%08x%08x", arc4random(), arc4random())
     
     var apiKey: String;
@@ -199,6 +199,29 @@ public class Client {
         task.resume()
     }
     
+    func saveAddress(address: String, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)address?report=\(report)")!
+        var request = URLRequest(url: url)
+        request.put(apiKey: apiKey, apiSecret: apiSecret, code: code)
+        
+        let json: [String: Any] = ["address": [address]]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        request.httpBody = jsonData
+        
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
     func fingerprints(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
         let url = URL(string: "\(base)fingerprints?report=\(report)")!
         var request = URLRequest(url: url)
@@ -306,6 +329,124 @@ public class Client {
             }
 
             completion(data, error)
+        }
+        task.resume()
+    }
+    
+    func saveEmail(email: String, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)email?report=\(report)")!
+        var request = URLRequest(url: url)
+        request.put(apiKey: apiKey, apiSecret: apiSecret, code: code)
+        
+        let json: [String: String] = ["email": email]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        request.httpBody = jsonData
+        
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func savePhone(phone: String, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)phone?report=\(report)")!
+        var request = URLRequest(url: url)
+        request.put(apiKey: apiKey, apiSecret: apiSecret, code: code)
+        
+        let json: [String: String] = ["phone": phone]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        request.httpBody = jsonData
+        
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func sentEmailOTP(completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)otp/generate/email?report=\(report)")!
+        var request = URLRequest(url: url)
+        request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func sentPhoneOTP(completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)otp/generate/phone?report=\(report)")!
+        var request = URLRequest(url: url)
+        request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func validateEmailOTP(otp: String, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)otp/validate/email/\(otp)?report=\(report)")!
+        var request = URLRequest(url: url)
+        request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
+    
+    func validatePhoneOTP(otp: String, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+        let url = URL(string: "\(base)otp/validate/phone/\(otp)?report=\(report)")!
+        var request = URLRequest(url: url)
+        request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                completion(nil, error)
+                return
+            }
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
         }
         task.resume()
     }

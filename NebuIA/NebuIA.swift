@@ -42,6 +42,77 @@ public class NebuIA {
         }
     }
     
+    public func saveEmail(email: String, completion: ((String) -> Void)? = nil) {
+        client.saveEmail(email: email) { data, error in
+            if data != nil {
+                let dict = data as! Dictionary<String, Any>
+                let response = dict["payload"] as! String
+                completion!(response)
+            }
+        }
+    }
+    
+    public func savePhone(phone: String, completion: ((String) -> Void)? = nil) {
+        client.savePhone(phone: phone) { data, error in
+            if data != nil {
+                let dict = data as! Dictionary<String, Any>
+                let response = dict["payload"] as! String
+                completion!(response)
+            }
+        }
+    }
+    
+    public func generateEmailOTP(completion: ((String) -> Void)? = nil) {
+        client.sentEmailOTP() { data, error in
+            if data != nil {
+                let dict = data as! Dictionary<String, Any>
+                let response = dict["payload"] as! String
+                completion!(response)
+            }
+        }
+    }
+    
+    public func generatePhoneOTP(completion: ((String) -> Void)? = nil) {
+        client.sentPhoneOTP() { data, error in
+            if data != nil {
+                let dict = data as! Dictionary<String, Any>
+                let response = dict["payload"] as! String
+                completion!(response)
+            }
+        }
+    }
+    
+    // verify
+    public func verifyEmailOTP(otp: String, completion: ((String) -> Void)? = nil) {
+        client.validateEmailOTP(otp: code) { data, error in
+            if data != nil {
+                let dict = data as! Dictionary<String, Any>
+                let response = dict["payload"] as! String
+                completion!(response)
+            }
+        }
+    }
+    
+    public func verifyPhoneOTP(otp: String, completion: ((Bool) -> Void)? = nil) {
+        client.validatePhoneOTP(otp: otp) { data, error in
+            if data != nil {
+                let dict = data as! Dictionary<String, Any>
+                let response = dict["status"] as! Bool
+                completion!(response)
+            }
+        }
+    }
+    
+    public func verifyEmailOTP(otp: String, completion: ((Bool) -> Void)? = nil) {
+        client.validatePhoneOTP(otp: otp) { data, error in
+            if data != nil {
+                let dict = data as! Dictionary<String, Any>
+                let response = dict["status"] as! Bool
+                completion!(response)
+            }
+        }
+    }
+    
     public func faceProof(completion: (() -> Void)? = nil) {
         let faceController = FaceController()
         faceController.detector = detector
@@ -50,12 +121,12 @@ public class NebuIA {
         ctr.present(faceController, animated: true, completion: nil)
     }
     
-    public func signerVideo(completion: ((UIImage) -> Void)? = nil) {
-        let signerController = SignerController()
-        signerController.detector = detector
-        signerController.client = client
-        signerController.onCompleteSign = completion
-        ctr.present(signerController, animated: true, completion: nil)
+    public func signerVideo(completion: ((String) -> Void)? = nil) {
+        let videoController = VideoController()
+        videoController.detector = detector
+        videoController.client = client
+        videoController.onCompleteVideo = completion
+        ctr.present(videoController, animated: true, completion: nil)
     }
     
     public func idScanner(completion: (() -> Void)? = nil, error: (() -> Void)? = nil) {
@@ -75,6 +146,21 @@ public class NebuIA {
         addressController.onComplete = completion
         addressController.onError = error
         ctr.present(addressController, animated: true, completion: nil)
+    }
+    
+    public func saveAddress(address: String, completion: ((NSDictionary) -> Void)? = nil, onError: ((String) -> Void)? = nil) {
+        client.saveAddress(address: address) { data, error in
+            if data != nil {
+                let dict = data as! Dictionary<String, Any>
+                let response = dict["payload"]!
+                if(response is NSDictionary) {
+                    completion!(response as! NSDictionary)
+                }
+                else {
+                    onError!(response as! String)
+                }
+            }
+        }
     }
     
     public func fingerprintScanner(completion: ((UIImage, UIImage, UIImage, UIImage) -> Void)? = nil) {

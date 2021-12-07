@@ -25,6 +25,7 @@ extension URLRequest {
     
     mutating func get(apiKey: String, apiSecret: String, code: String) {
         self.httpMethod = "GET"
+        self.addValue("application/json", forHTTPHeaderField: "Accept")
         self.setValue(
             apiKey,
             forHTTPHeaderField: "api_key"
@@ -37,6 +38,26 @@ extension URLRequest {
             code,
             forHTTPHeaderField: "time_key"
         )
+    }
+    
+    mutating func put(apiKey: String, apiSecret: String, code: String) {
+        self.httpMethod = "PUT"
+        self.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        self.addValue("application/json", forHTTPHeaderField: "Accept")
+        self.setValue(
+            apiKey,
+            forHTTPHeaderField: "api_key"
+        )
+        self.setValue(
+            apiSecret,
+            forHTTPHeaderField: "api_secret"
+        )
+        self.setValue(
+            code,
+            forHTTPHeaderField: "time_key"
+        )
+        
+        
     }
     
     mutating func emptyPOST(apiKey: String, apiSecret: String, code: String) {

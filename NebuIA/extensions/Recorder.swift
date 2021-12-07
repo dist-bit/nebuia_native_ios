@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension SignerController {
+extension VideoController {
     func canWrite() -> Bool {
         return isRecording
         && videoWriter != nil
@@ -21,16 +21,14 @@ extension SignerController {
         videoWriter.startWriting()
     }
     
-    func stop() {
+    func stop(completion: @escaping (_ data: String?)->()) {
           guard isRecording else { return }
           isRecording = false
           videoWriter.finishWriting { [weak self] in
               self?.sessionAtSourceTime = nil
               guard let url = self?.videoWriter.outputURL else { return }
-              
-              print(url)
-              //let asset = AVURLAsset(url: url)
-              //Do whatever you want with your asset here
+    
+              completion(url.path)
           }
       }
 }

@@ -31,7 +31,7 @@
 		054DC092273EE7CD00330B59 /* Id.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC088273EE7CD00330B59 /* Id.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054DC093273EE7CD00330B59 /* Detection.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC089273EE7CD00330B59 /* Detection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054DC094273EE7CD00330B59 /* Face.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC08A273EE7CD00330B59 /* Face.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		054DC0A5273EE7D500330B59 /* SignerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC097273EE7D500330B59 /* SignerController.swift */; };
+		054DC0A5273EE7D500330B59 /* VideoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC097273EE7D500330B59 /* VideoController.swift */; };
 		054DC0A6273EE7D500330B59 /* FingerprintPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC099273EE7D500330B59 /* FingerprintPreview.swift */; };
 		054DC0A7273EE7D500330B59 /* FingerprintScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC09A273EE7D500330B59 /* FingerprintScannerController.swift */; };
 		054DC0A8273EE7D500330B59 /* LoadingDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC09B273EE7D500330B59 /* LoadingDialog.swift */; };
@@ -77,7 +77,7 @@
 		054DC088273EE7CD00330B59 /* Id.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Id.h; sourceTree = "<group>"; };
 		054DC089273EE7CD00330B59 /* Detection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Detection.h; sourceTree = "<group>"; };
 		054DC08A273EE7CD00330B59 /* Face.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Face.h; sourceTree = "<group>"; };
-		054DC097273EE7D500330B59 /* SignerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignerController.swift; sourceTree = "<group>"; };
+		054DC097273EE7D500330B59 /* VideoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoController.swift; sourceTree = "<group>"; };
 		054DC099273EE7D500330B59 /* FingerprintPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FingerprintPreview.swift; sourceTree = "<group>"; };
 		054DC09A273EE7D500330B59 /* FingerprintScannerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FingerprintScannerController.swift; sourceTree = "<group>"; };
 		054DC09B273EE7D500330B59 /* LoadingDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingDialog.swift; sourceTree = "<group>"; };
@@ -171,7 +171,7 @@
 		054DC095273EE7D500330B59 /* views */ = {
 			isa = PBXGroup;
 			children = (
-				054DC096273EE7D500330B59 /* signer */,
+				054DC096273EE7D500330B59 /* video */,
 				054DC098273EE7D500330B59 /* fingerprint */,
 				054DC09C273EE7D500330B59 /* face */,
 				054DC09E273EE7D500330B59 /* address */,
@@ -180,12 +180,12 @@
 			path = views;
 			sourceTree = "<group>";
 		};
-		054DC096273EE7D500330B59 /* signer */ = {
+		054DC096273EE7D500330B59 /* video */ = {
 			isa = PBXGroup;
 			children = (
-				054DC097273EE7D500330B59 /* SignerController.swift */,
+				054DC097273EE7D500330B59 /* VideoController.swift */,
 			);
-			path = signer;
+			path = video;
 			sourceTree = "<group>";
 		};
 		054DC098273EE7D500330B59 /* fingerprint */ = {
@@ -408,7 +408,7 @@
 				054DC07F273EE7C300330B59 /* Side.swift in Sources */,
 				054DC08D273EE7CD00330B59 /* Inference.mm in Sources */,
 				054DC076273EE7BC00330B59 /* Color.swift in Sources */,
-				054DC0A5273EE7D500330B59 /* SignerController.swift in Sources */,
+				054DC0A5273EE7D500330B59 /* VideoController.swift in Sources */,
 				054DC0AB273EE7D500330B59 /* AddressPreviewController.swift in Sources */,
 				054DC075273EE7BC00330B59 /* Font.swift in Sources */,
 				054DC08E273EE7CD00330B59 /* Detection.m in Sources */,
