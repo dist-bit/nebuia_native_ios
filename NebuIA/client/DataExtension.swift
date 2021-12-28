@@ -14,6 +14,13 @@ extension Data {
         //self.httpBody = body
     }
     
+    mutating func valueBody(key: String, value: String, boundary: String) {
+        self.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
+        self.append("Content-Disposition: form-data; name=\(key)\r\n\r\n".data(using: .utf8)!)
+        self.append("\(value)\r\n".data(using: .utf8)!)
+        //self.httpBody = body
+    }
+    
     mutating func fileBody(image: Data,  boundary: String, filename: String) {
         self.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
         self.append("Content-Disposition: form-data; name=\(filename); filename=\(filename).pdf\r\n".data(using: .utf8)!)

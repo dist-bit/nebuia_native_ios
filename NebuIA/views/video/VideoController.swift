@@ -29,6 +29,7 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     
     var client: Client!
     var detector: DetectorWrapper!
+    var textToRead: String!
     
     private var detecting: Bool = true
     private var complete: Bool = false
@@ -36,13 +37,13 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     private var faceCount: Int = 0
     private var faceComplete: Bool = false
     
-    private var frontCount: Int = 0
+    /* private var frontCount: Int = 0
     private var scanFront: Bool = false
     private var scanFrontComplete: Bool = false
     
     private var backCount: Int = 0
     private var scanBack: Bool = false
-    private var scanBackComplete: Bool = false
+    private var scanBackComplete: Bool = false */
     
     private var content_view_preview: UIView!
     private var content_view: UIView!
@@ -66,10 +67,14 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     var onCompleteVideo : ((String) -> Void)?
     
     @IBAction func analyseID(_ sender: UIButton) {
-        setActionText(text: "Por favor muestra la parte frontal de tu identificación oficial INE/IFE", action: "Esperando parte frontal de tu ID")
+        //setActionText(text: "Por favor muestra la parte frontal de tu identificación oficial INE/IFE", action: "Esperando parte frontal de tu ID")
         text_to_read.isHidden = true
         scan_id_button.isHidden = true
-        scanFront = true
+        //scanFront = true
+        stop { data in
+            self.onCompleteVideo!(data!)
+            self.back()
+        }
     }
     
     private func buildBackbutton() {
@@ -149,12 +154,14 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     private func initializeOverlay() {
         text_to_read_label = UILabel(frame: UIScreen.main.bounds)
         text_to_read_label.textAlignment = .center
-        text_to_read_label.numberOfLines = 4
+        text_to_read_label.numberOfLines = 6
         text_to_read_label.textColor = .white
-        text_to_read_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 14), weight: .regular)
-        text_to_read_label.minimumScaleFactor = 12/UIFont.labelFontSize
+        text_to_read_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 11), weight: .regular)
+        text_to_read_label.minimumScaleFactor = 11/UIFont.labelFontSize
         text_to_read_label.adjustsFontSizeToFitWidth = true
-        text_to_read_label.text = "Yo Mauricio Lopez Piedra declaro que estoy adquiriendo con pleno conocimiento un credito personal por la canidad de $ 96,000 pesos y plazo indicado en los documentos firmados"
+        
+        // get names
+        getNames()
         
         text_to_read = UIView(frame: UIScreen.main.bounds)
         text_to_read.backgroundColor = UIColor(rgb: 0x232a58)
@@ -193,7 +200,7 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
             text_to_read.centerX == content_view.centerX
             text_to_read.top ==  summary_label.bottom + 25
             text_to_read.width == content_view_preview.width + 10
-            text_to_read.height == 130
+            text_to_read.height == 150
             
             text_to_read_label.centerX == text_to_read.centerX
             text_to_read_label.centerY == text_to_read.centerY - 10
@@ -322,6 +329,62 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
         }
     }
     
+    func getNames() {
+        var completeText: String = "Yo"
+        client.getReportSummary{ data, error in
+            if data != nil {
+                let dict = data as! Dictionary<String, Any>
+                let payload = dict["payload"] as! Dictionary<String, Any>
+                let documentExists = payload["document"] != nil
+            
+                if documentExists {
+                    let document = payload["document"] as! Dictionary<String, Any>
+                    let nameExists =  document["names"] != nil
+                    
+                    if nameExists {
+                        let names = document["names"] as! Dictionary<String, Any>
+                        
+                        let containsNames =  names["names"] != nil
+                        if containsNames {
+                            let normalNames = names["names"] as! NSArray
+                            normalNames.forEach { word in
+                                completeText += " "
+                                completeText += word as! String
+                            }
+                        }
+                        
+                        let containsLastNames =  names["last_name"] != nil
+                        if containsLastNames {
+                            let lastNames = names["last_name"] as! String
+                            completeText += " "
+                            completeText += lastNames
+                        }
+                        
+                        DispatchQueue.main.async {
+                            completeText += " "
+                            completeText += self.textToRead
+                            self.text_to_read_label.text = completeText
+                        }
+                    } else {
+                        // if names not found
+                        DispatchQueue.main.async {
+                            completeText += " (diga su nombre completo) "
+                            completeText += self.textToRead
+                            self.text_to_read_label.text = completeText
+                        }
+                    }
+                } else {
+                    // if document not found
+                    DispatchQueue.main.async {
+                        completeText += " (diga su nombre completo) "
+                        completeText += self.textToRead
+                        self.text_to_read_label.text = completeText
+                    }
+                }
+            }
+        }
+    }
+    
     func setupLivePreview() {
         videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         videoPreviewLayer.videoGravity = .resizeAspectFill
@@ -341,21 +404,6 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     
     public override var shouldAutorotate : Bool {
         return false
-    }
-    
-    private func decodePayloadOnCrop(data: Any) -> (UIImage?, String?) {
-        if let result = data as? Dictionary<String, AnyObject> {
-            let payload = result["payload"] as? Dictionary<String, AnyObject>
-            if(payload != nil) {
-                if let val = payload!["image"] {
-                    let image = val as? String
-                    let data = Data(base64Encoded: image!)
-                    let type = payload!["type"] as? String
-                    return (UIImage(data: data!), type)
-                }
-            }
-        }
-        return (nil, nil)
     }
     
     private func onPreviewDissmis() {
@@ -385,9 +433,7 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
         }
         
         if captureOutput == stillImageOutput {
-            
             self.scan(sampleBuffer: sampleBuffer)
-            
             if writable, videoWriterInput.isReadyForMoreMediaData && self.isRecording {
                 videoWriterInput.append(sampleBuffer)
             }
@@ -397,9 +443,7 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
             //Write audio buffer
             audioWriterInput.append(sampleBuffer)
         }
-        
-        
-        
+    
     }
     
     private func scan(sampleBuffer: CMSampleBuffer) {
@@ -419,57 +463,6 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
                     }
                     
                     setActionText(text: "Por favor lee claramente el siguiente texto, una vez terminado pulsa el botón verde", action: "Esperando lectura")
-                }
-            }
-        }
-        
-        if scanFront {
-            let detections = detector.detectID(image)
-            
-            if(!detections.isEmpty) {
-                self.filterdetection(detection: detections[0], image: image)
-            }
-        }
-        
-        if scanBack {
-            let detections = detector.detectID(image)
-            
-            if(!detections.isEmpty) {
-                self.filterdetection(detection: detections[0], image: image)
-            }
-        }
-    }
-    
-    private func filterdetection(detection: Detection, image: UIImage) {
-        if scanFront {
-            if(detection.label == "mx_id_front") {
-                frontCount += 1
-                
-                if frontCount > 40 {
-                    setActionText(text: "Por favor muestra la parte trasera de tu identificación oficial INE/IFE", action: "Esperando parte trasera de tu ID")
-                    scanFrontComplete = true;
-                    scanFront = false;
-                    scanBack = true
-                }
-                
-            }
-        }
-        
-        if scanBack {
-            if(detection.label == "mx_id_back") {
-                backCount += 1
-                
-                if backCount > 40 {
-                    setActionText(text: "Proceso finalizado, espera por favot", action: "Proceso finalizado")
-                    scanBackComplete = true;
-                    scanBack = false;
-                   
-                    self.stop { data in
-                        self.onCompleteVideo!(data!)
-                        self.back()
-                    }
-                    
-                    
                 }
             }
         }

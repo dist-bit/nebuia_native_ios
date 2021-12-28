@@ -121,11 +121,12 @@ public class NebuIA {
         ctr.present(faceController, animated: true, completion: nil)
     }
     
-    public func signerVideo(completion: ((String) -> Void)? = nil) {
+    public func signerVideo(text: String, completion: ((String) -> Void)? = nil) {
         let videoController = VideoController()
         videoController.detector = detector
         videoController.client = client
         videoController.onCompleteVideo = completion
+        videoController.textToRead = text
         ctr.present(videoController, animated: true, completion: nil)
     }
     
@@ -163,11 +164,12 @@ public class NebuIA {
         }
     }
     
-    public func fingerprintScanner(completion: ((UIImage, UIImage, UIImage, UIImage) -> Void)? = nil) {
+    public func fingerprintScanner(hand: Int, completion: ((UIImage, UIImage, UIImage, UIImage) -> Void)? = nil) {
         let fingerprintController = FingerprintScannerController()
         fingerprintController.detector = detector
         fingerprintController.client = client
         fingerprintController.onCompleteFingerprint = completion
+        fingerprintController.position = hand
         ctr.present(fingerprintController, animated: true, completion: nil)
     }
     

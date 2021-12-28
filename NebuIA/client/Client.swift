@@ -8,6 +8,7 @@
 import UIKit
 
 public class Client {
+    //private var base: String = "https://api.nebuia.com/api/v1/services/"
     private var base: String = "https://api.nebuia.com/api/v1/services/"
     private var boundary = String(format: "----iOSURLSessionBoundary.%08x%08x", arc4random(), arc4random())
     
@@ -222,7 +223,7 @@ public class Client {
         task.resume()
     }
     
-    func fingerprints(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
+    func fingerprints(image: UIImage, position: Int, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
         let url = URL(string: "\(base)fingerprints?report=\(report)")!
         var request = URLRequest(url: url)
         guard let imageData = image.jpegData(compressionQuality: 100.0) else {
@@ -231,6 +232,7 @@ public class Client {
         
         var body = Data()
         body.imageBody(image: imageData, boundary: boundary, filename: "image")
+        body.valueBody(key: "hand", value: String(position), boundary: boundary)
         body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
         
         request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)

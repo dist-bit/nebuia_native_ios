@@ -9,7 +9,12 @@ import UIKit
 import AVFoundation
 import Cartography
 
-public class FaceController: UIViewController,  AVCaptureVideoDataOutputSampleBufferDelegate {
+import UIKit
+import AVKit
+import AVFoundation
+import Cartography
+
+public class FaceController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     private var captureSession: AVCaptureSession!
     private var stillImageOutput: AVCaptureVideoDataOutput!
@@ -19,11 +24,22 @@ public class FaceController: UIViewController,  AVCaptureVideoDataOutputSampleBu
     var detector: DetectorWrapper!
     
     private var detecting: Bool = false
+    private var complete: Bool = false
     
-    private var camera_view: UIView!
+    private var faceCount: Int = 0
+    private var faceComplete: Bool = false
+    
+    private var frontCount: Int = 0
+    private var scanFront: Bool = false
+    private var scanFrontComplete: Bool = false
+    
+    private var backCount: Int = 0
+    private var scanBack: Bool = false
+    private var scanBackComplete: Bool = false
+    
+    private var content_view_preview: UIView!
     private var content_view: UIView!
     
-    private var back_button: UIButton!
     private var title_label: UILabel!
     private var summary_label: UILabel!
     private var action_label: UILabel!
@@ -31,126 +47,103 @@ public class FaceController: UIViewController,  AVCaptureVideoDataOutputSampleBu
     private var loading_indicator: UIActivityIndicatorView!
     
     private var nebuia_logo: UIImageView!
-    private var success_icon: UIImageView!
+    
+    private var device: AVCaptureDevice!
+    
     
     var onComplete: (() -> Void)?
-    
-    @IBAction func goBack(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    private func buildBackbutton() {
-        back_button = UIButton(type: .system)
-        
-        back_button.frame = CGRect(x: 100, y: 100, width: 45, height: 45)
-        
-        back_button.layer.cornerRadius =  back_button.frame.size.width/2
-        back_button.clipsToBounds = true
-        back_button.contentMode = UIView.ContentMode.scaleToFill
-        
-        back_button.backgroundColor =  UIColor(rgb: 0xffffff).withAlphaComponent(0.3)
-        back_button.translatesAutoresizingMaskIntoConstraints = false
-        
-        if #available(iOS 13.0, *) {
-            let btnImage = UIImage(systemName: "chevron.backward")
-            back_button.setImage(btnImage , for: .normal)
-            back_button.tintColor = UIColor.white
-        }
-        back_button.addTarget(self, action: #selector(goBack(_:)), for: .touchUpInside)
-    }
     
     private func buildTitleLabel() {
         title_label = UILabel(frame: UIScreen.main.bounds)
         title_label.textAlignment = .center
         title_label.numberOfLines = 1
+        title_label.textColor = .black
         title_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 16), weight: .bold)
         title_label.minimumScaleFactor = 10/UIFont.labelFontSize
         title_label.adjustsFontSizeToFitWidth = true
-        title_label.text = "Reconocimiento facial"
+        title_label.text = "Prueba de vida"
     }
     
     private func buildActionLabel() {
         action_label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
         action_label.textAlignment = .center
         action_label.numberOfLines = 1
-        action_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 10), weight: .regular)
+        action_label.textColor = UIColor(rgb: 0x009ad7)
+        action_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 11), weight: .regular)
         action_label.minimumScaleFactor = 10/UIFont.labelFontSize
         action_label.adjustsFontSizeToFitWidth = true
-        action_label.text = "Realizando prueba de vida"
+        action_label.text = "Esperando rostro"
     }
     
     private func buildSummaryLabel() {
         summary_label = UILabel(frame: UIScreen.main.bounds)
-        summary_label.textAlignment = .left
-        summary_label.numberOfLines = 2
+        summary_label.textAlignment = .center
+        summary_label.numberOfLines = 3
         summary_label.minimumScaleFactor = 10/UIFont.labelFontSize
         summary_label.adjustsFontSizeToFitWidth = true
+        summary_label.textColor = UIColor(rgb: 0x7d82a8)
         summary_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 12), weight: .regular)
-        summary_label.text = "Realizaremos la prueba de vida\nColoca tu rostro en el centro de la pantalla"
+        summary_label.text = "Por favor, coloca tu rostro en el recuadro y sigue las instrucciones de parte inferior"
     }
     
     private func buildLogoBottom() {
-        let logo = UIImage(named: "nebuia_white.png")
+        let logo = UIImage(named: "nebuia_black.png")
         nebuia_logo = UIImageView(image: logo!)
     }
     
-    private func buildSuccessIcon() {
-        if #available(iOS 13.0, *) {
-            let check = UIImage(systemName: "checkmark.circle.fill")
-            success_icon = UIImageView(image: check!)
-            success_icon.tintColor = UIColor(rgb: 0x16a085)
-            self.success_icon.isHidden = true
-        }
-    }
     
     private func buildLoadingindicator() {
         loading_indicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        loading_indicator.color = .black
         loading_indicator.startAnimating()
     }
     
     private func hideLoadingShowSuccess() {
         UIView.transition(with: loading_indicator, duration: 0.4, options: .transitionCrossDissolve, animations: {() -> Void in
             self.loading_indicator.isHidden = true
-            self.success_icon.isHidden = false
         }, completion: { _ in })
     }
     
     func constraintsInit() {
         let botom: CGFloat = UIDevice.current.hasNotch ? 50 : 0
-        constrain(back_button!, title_label, content_view, action_label, summary_label, nebuia_logo, loading_indicator, success_icon)
-        { back_button, title_label, content_view, action_label, summary_label, nebuia_logo, loading_indicator, success_icon in
-            back_button.width == 45
-            back_button.height == 45
-            back_button.left == content_view.superview!.left + 25
-            back_button.top == content_view.superview!.top + 20
-            title_label.left == back_button.left
-            title_label.top == back_button.bottom + 20
-            summary_label.top == title_label.top + 30
-            summary_label.left == back_button.left
-            action_label.left == back_button.left
+        constrain(title_label, content_view, action_label, summary_label, nebuia_logo, loading_indicator, content_view_preview)
+        { title_label, content_view, action_label, summary_label, nebuia_logo, loading_indicator, content_view_preview in
+            
             action_label.centerX == content_view.centerX
             loading_indicator.centerX == content_view.centerX
-            success_icon.centerX == content_view.centerX
-            success_icon.top == action_label.bottom + 15
+            
             nebuia_logo.centerX == content_view.centerX
-            nebuia_logo.width == content_view.superview!.width / 4.6
-            nebuia_logo.height == 17
+            nebuia_logo.width == content_view.superview!.width / 3.6
+            nebuia_logo.height == 20
             nebuia_logo.centerY == content_view.superview!.bottom - botom - 50
-            distribute(by: 15, vertically: action_label, loading_indicator, nebuia_logo)
+            
+            title_label.centerX == content_view.centerX
+            title_label.top == content_view.superview!.top + 40
+            
+            content_view_preview.centerX == content_view.centerX
+            content_view_preview.top == content_view.superview!.top + 80
+            content_view_preview.width == 322
+            content_view_preview.height == 365
+            
+            
+            summary_label.top == content_view_preview.bottom + 15
+            summary_label.width == content_view.superview!.width / 1.2
+            summary_label.centerX == content_view.centerX
+            
+            distribute(by: 20, vertically: action_label, loading_indicator, nebuia_logo)
         }
     }
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        view.backgroundColor = .white
         
         // camara
-        camera_view = UIView(frame: UIScreen.main.bounds)
+        content_view_preview = UIView(frame: UIScreen.main.bounds)
+        content_view_preview.layer.cornerRadius = 20
+        content_view_preview.clipsToBounds = true
+        content_view_preview.layer.cornerRadius = 20
         content_view = UIView(frame: UIScreen.main.bounds)
-        
-        // set up back button
-        buildBackbutton()
-        content_view.addSubview(back_button)
         
         // set up title layer
         buildTitleLabel()
@@ -172,13 +165,8 @@ public class FaceController: UIViewController,  AVCaptureVideoDataOutputSampleBu
         buildLoadingindicator()
         content_view.addSubview(loading_indicator)
         
-        // set up success icon
-        buildSuccessIcon()
-        content_view.addSubview(success_icon)
-        
-        
         let root_view = UIView(frame: UIScreen.main.bounds)
-        root_view.addSubview(camera_view)
+        root_view.addSubview(content_view_preview)
         root_view.addSubview(content_view)
         
         self.view.addSubview(root_view)
@@ -192,9 +180,9 @@ public class FaceController: UIViewController,  AVCaptureVideoDataOutputSampleBu
         
         
         guard let frontCamera = AVCaptureDevice.default(
-                .builtInWideAngleCamera,
-                for: AVMediaType.video,
-                position: .front)
+            .builtInWideAngleCamera,
+            for: AVMediaType.video,
+            position: .front)
         else {
             print("Unable to access back camera!")
             return
@@ -229,18 +217,12 @@ public class FaceController: UIViewController,  AVCaptureVideoDataOutputSampleBu
     
     func setupLivePreview() {
         videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        
         videoPreviewLayer.videoGravity = .resizeAspectFill
         videoPreviewLayer.connection?.videoOrientation = .portrait
-        
-        
-        camera_view.layer.addSublayer(videoPreviewLayer)
-        
-        DispatchQueue.global(qos: .userInitiated).async { //[weak self] in
+        videoPreviewLayer.frame = content_view_preview.bounds
+        content_view_preview.layer.addSublayer(self.videoPreviewLayer)
+        DispatchQueue.global(qos: .userInitiated).async {
             self.captureSession.startRunning()
-            DispatchQueue.main.async {
-                self.videoPreviewLayer.frame = self.camera_view.bounds
-            }
         }
     }
     
@@ -280,21 +262,93 @@ public class FaceController: UIViewController,  AVCaptureVideoDataOutputSampleBu
     public func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         if(!self.detecting) {
             self.detecting = true
-            
-            let image = sampleBuffer.toUIImage()
-            let boxes = detector.detectFace(image)
+            self.scan(sampleBuffer: sampleBuffer)
+        }
         
+    }
+    
+    private func scan(sampleBuffer: CMSampleBuffer) {
+        let image = sampleBuffer.toUIImage()
+        
+        if !faceComplete {
+            let boxes = detector.detectFace(image)
+            
             if(boxes.count == 1) {
                 client.faceScanner(image: image) { data, error in
                     let status = self.decodePayload(data: data ?? false)
-                    self.detecting = status
                     if(status) {
-                        self.back()
+                        DispatchQueue.main.async {
+                            self.faceComplete = true
+                            self.scanFront = true
+                            self.setActionText(text: "Por favor muestra la parte frontal de tu identificación oficial INE/IFE", action: "Esperando parte frontal de tu ID")
+                        }
                     }
+                    //
+                    self.detecting = false
                 }
             } else {
                 self.detecting = false
             }
         }
+        
+        if scanFront {
+            let detections = detector.detectID(image)
+            
+            if(!detections.isEmpty) {
+                self.filterdetection(detection: detections[0], image: image)
+            }
+            
+            self.detecting = false
+        }
+        
+        if scanBack {
+            let detections = detector.detectID(image)
+            
+            if(!detections.isEmpty) {
+                self.filterdetection(detection: detections[0], image: image)
+            }
+            
+            self.detecting = false
+        }
     }
+    
+    private func filterdetection(detection: Detection, image: UIImage) {
+        if scanFront {
+            if(detection.label == "mx_id_front") {
+                frontCount += 1
+                
+                if frontCount > 40 {
+                    setActionText(text: "Por favor muestra la parte trasera de tu identificación oficial INE/IFE", action: "Esperando parte trasera de tu ID")
+                    scanFrontComplete = true;
+                    scanFront = false;
+                    scanBack = true
+                }
+                
+            }
+        }
+        
+        if scanBack {
+            if(detection.label == "mx_id_back") {
+                backCount += 1
+                
+                if backCount > 40 {
+                    setActionText(text: "Proceso finalizado, espera por favor", action: "Proceso finalizado")
+                    scanBackComplete = true;
+                    scanBack = false;
+                    self.back()
+                }
+            }
+        }
+    }
+    
+    private func setActionText(text: String, action: String) {
+        DispatchQueue.main.async {
+            self.summary_label.text = text
+            self.action_label.text = action
+            Vibration.success.vibrate()
+        }
+    }
+    
 }
+
+

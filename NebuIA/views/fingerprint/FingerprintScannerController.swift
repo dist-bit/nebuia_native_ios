@@ -17,6 +17,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     
     var client: Client!
     var detector: DetectorWrapper!
+    var position: Int!
     
     private var detecting: Bool = true
     private var complete: Bool = false
@@ -376,7 +377,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                     }
                     
                     // get image
-                    client.fingerprints(image: image, completion: { data, error in
+                    client.fingerprints(image: image, position: position, completion: { data, error in
                         if error == nil {
                             let dict = data as! Dictionary<String, Any>
                             
