@@ -304,6 +304,7 @@ public class Client {
                 completion(nil, error)
                 return
             }
+            
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
         }

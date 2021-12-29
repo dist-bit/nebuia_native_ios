@@ -29,11 +29,12 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     
     var client: Client!
     var detector: DetectorWrapper!
-    var textToRead: String!
+    var textToRead: [String]!
     
     private var detecting: Bool = true
     private var complete: Bool = false
     
+    private var textPosition: Int = 0
     private var faceCount: Int = 0
     private var faceComplete: Bool = false
     
@@ -67,13 +68,25 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     var onCompleteVideo : ((String) -> Void)?
     
     @IBAction func analyseID(_ sender: UIButton) {
-        //setActionText(text: "Por favor muestra la parte frontal de tu identificación oficial INE/IFE", action: "Esperando parte frontal de tu ID")
-        text_to_read.isHidden = true
-        scan_id_button.isHidden = true
-        //scanFront = true
-        stop { data in
-            self.onCompleteVideo!(data!)
-            self.back()
+        let originalLength = textToRead.count
+
+        if originalLength == textPosition + 2 {
+            if #available(iOS 13.0, *) {
+                let btnImage = UIImage(systemName: "checkmark")
+                scan_id_button.setImage(btnImage , for: .normal)
+            }
+        }
+        
+        if originalLength != textPosition + 1 {
+            textPosition += 1
+            text_to_read_label.text = textToRead[textPosition]
+        } else {
+            text_to_read.isHidden = true
+            scan_id_button.isHidden = true
+            stop { data in
+                self.onCompleteVideo!(data!)
+                self.back()
+            }
         }
     }
     
@@ -90,7 +103,8 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
         scan_id_button.translatesAutoresizingMaskIntoConstraints = false
         
         if #available(iOS 13.0, *) {
-            let btnImage = UIImage(systemName: "checkmark")
+            let btnImage = textToRead.count == textPosition + 1 ? UIImage(systemName: "checkmark") : UIImage(systemName: "arrow.forward")
+            
             scan_id_button.setImage(btnImage , for: .normal)
             scan_id_button.tintColor = UIColor.white
         }
@@ -154,7 +168,7 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     private func initializeOverlay() {
         text_to_read_label = UILabel(frame: UIScreen.main.bounds)
         text_to_read_label.textAlignment = .center
-        text_to_read_label.numberOfLines = 6
+        text_to_read_label.numberOfLines = 14
         text_to_read_label.textColor = .white
         text_to_read_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 11), weight: .regular)
         text_to_read_label.minimumScaleFactor = 11/UIFont.labelFontSize
@@ -198,9 +212,9 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
             summary_label.centerX == content_view.centerX
             
             text_to_read.centerX == content_view.centerX
-            text_to_read.top ==  summary_label.bottom + 25
-            text_to_read.width == content_view_preview.width + 10
-            text_to_read.height == 150
+            text_to_read.top ==  summary_label.bottom + 20
+            text_to_read.width == content_view_preview.width + 20
+            text_to_read.height == 125
             
             text_to_read_label.centerX == text_to_read.centerX
             text_to_read_label.centerY == text_to_read.centerY - 10
@@ -362,14 +376,14 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
                         
                         DispatchQueue.main.async {
                             completeText += " "
-                            completeText += self.textToRead
+                            completeText += self.textToRead[0]
                             self.text_to_read_label.text = completeText
                         }
                     } else {
                         // if names not found
                         DispatchQueue.main.async {
                             completeText += " (diga su nombre completo) "
-                            completeText += self.textToRead
+                            completeText += self.textToRead[0]
                             self.text_to_read_label.text = completeText
                         }
                     }
@@ -377,7 +391,7 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
                     // if document not found
                     DispatchQueue.main.async {
                         completeText += " (diga su nombre completo) "
-                        completeText += self.textToRead
+                        completeText += self.textToRead[0]
                         self.text_to_read_label.text = completeText
                     }
                 }
@@ -535,6 +549,8 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     private func getVideoTransform() -> CGAffineTransform {
         return CGAffineTransform(rotationAngle: .pi/2)
     }
+    
+    // only bancrea
     
 }
 

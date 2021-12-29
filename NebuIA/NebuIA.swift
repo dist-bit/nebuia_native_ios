@@ -121,7 +121,7 @@ public class NebuIA {
         ctr.present(faceController, animated: true, completion: nil)
     }
     
-    public func signerVideo(text: String, completion: ((String) -> Void)? = nil) {
+    public func signerVideo(text: [String], completion: ((String) -> Void)? = nil) {
         let videoController = VideoController()
         videoController.detector = detector
         videoController.client = client
