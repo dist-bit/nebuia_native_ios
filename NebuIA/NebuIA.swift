@@ -42,41 +42,41 @@ public class NebuIA {
         }
     }
     
-    public func saveEmail(email: String, completion: ((String) -> Void)? = nil) {
+    public func saveEmail(email: String, completion: ((Bool) -> Void)? = nil) {
         client.saveEmail(email: email) { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
-                let response = dict["payload"] as! String
+                let response = dict["status"] as! Bool
                 completion!(response)
             }
         }
     }
     
-    public func savePhone(phone: String, completion: ((String) -> Void)? = nil) {
+    public func savePhone(phone: String, completion: ((Bool) -> Void)? = nil) {
         client.savePhone(phone: phone) { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
-                let response = dict["payload"] as! String
+                let response = dict["status"] as! Bool
                 completion!(response)
             }
         }
     }
     
-    public func generateEmailOTP(completion: ((String) -> Void)? = nil) {
+    public func generateEmailOTP(completion: ((Bool) -> Void)? = nil) {
         client.sentEmailOTP() { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
-                let response = dict["payload"] as! String
+                let response = dict["status"] as! Bool
                 completion!(response)
             }
         }
     }
     
-    public func generatePhoneOTP(completion: ((String) -> Void)? = nil) {
+    public func generatePhoneOTP(completion: ((Bool) -> Void)? = nil) {
         client.sentPhoneOTP() { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
-                let response = dict["payload"] as! String
+                let response = dict["status"] as! Bool
                 completion!(response)
             }
         }
