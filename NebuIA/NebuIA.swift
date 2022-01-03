@@ -83,16 +83,6 @@ public class NebuIA {
     }
     
     // verify
-    public func verifyEmailOTP(otp: String, completion: ((String) -> Void)? = nil) {
-        client.validateEmailOTP(otp: code) { data, error in
-            if data != nil {
-                let dict = data as! Dictionary<String, Any>
-                let response = dict["payload"] as! String
-                completion!(response)
-            }
-        }
-    }
-    
     public func verifyPhoneOTP(otp: String, completion: ((Bool) -> Void)? = nil) {
         client.validatePhoneOTP(otp: otp) { data, error in
             if data != nil {
