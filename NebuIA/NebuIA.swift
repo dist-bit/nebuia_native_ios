@@ -28,6 +28,10 @@ public class NebuIA {
         client.code = code
     }
     
+    public func setClientURI(uri: String)  {
+        client.base = uri
+    }
+    
     public func setReport(report: String) {
         client.report = report
     }

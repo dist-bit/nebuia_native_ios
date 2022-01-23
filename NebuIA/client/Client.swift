@@ -9,13 +9,13 @@ import UIKit
 
 public class Client {
     //private var base: String = "https://api.nebuia.com/api/v1/services/"
-    private var base: String = "https://api.nebuia.com/api/v1/services/"
     private var boundary = String(format: "----iOSURLSessionBoundary.%08x%08x", arc4random(), arc4random())
     
     var apiKey: String;
     var apiSecret: String;
     var code: String = "";
     var report: String = "";
+    var base: String = "https://api.nebuia.com/api/v1/services/"
     
     init(publicKey: String, secretKey: String) {
         self.apiKey = publicKey
