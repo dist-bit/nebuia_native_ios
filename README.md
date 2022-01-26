@@ -175,8 +175,6 @@ You need to add C++ framework under Build Phases
 
 ### Images
 
-<a href="https://ibb.co/ZS7RCyg"><img src="https://i.ibb.co/cwVKdz8/A09-C66-D6-F44-A-49-C9-AE0-E-C3-DC1-C437-A08.png" alt="A09-C66-D6-F44-A-49-C9-AE0-E-C3-DC1-C437-A08" width="400px" border="0"></a>   <a href="https://ibb.co/8sf7Hyb"><img src="https://i.ibb.co/cDKsFd2/250535358-413981940180101-6048282842317169740-n.jpg" alt="D9-DE5840-DD7-E-493-D-899-D-6-CAF9-B77-BFA5" width="400px" border="0"></a>
-
 
 
 
