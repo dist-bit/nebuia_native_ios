@@ -167,14 +167,6 @@ nebuIA.createReport() { report in
 }
 ```
 
-##### C++ support
-
-You need to add C++ framework under Build Phases
-
-<a href="https://ibb.co/4mPwjp0"><img src="https://i.ibb.co/DV5P7Qj/Captura-de-Pantalla-2021-08-10-a-la-s-17-27-45.png" alt="Captura-de-Pantalla-2021-08-10-a-la-s-17-27-45" border="0"></a>
-
-### Images
-
 
 
 
