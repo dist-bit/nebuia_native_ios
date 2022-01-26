@@ -8,8 +8,8 @@
 extension Data {
     mutating func imageBody(image: Data,  boundary: String, filename: String) {
         self.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-        self.append("Content-Disposition: form-data; name=\(filename); filename=\(filename).jpeg\r\n".data(using: .utf8)!)
-        self.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        self.append("Content-Disposition: form-data; name=\(filename); filename=\(filename).webp\r\n".data(using: .utf8)!)
+        self.append("Content-Type: image/webp\r\n\r\n".data(using: .utf8)!)
         self.append(image)
         //self.httpBody = body
     }
