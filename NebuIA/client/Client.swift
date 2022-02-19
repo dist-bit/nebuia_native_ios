@@ -234,8 +234,8 @@ public class Client {
         }
         
         var body = Data()
-        body.imageBody(image: imageData, boundary: boundary, filename: "image")
         body.valueBody(key: "hand", value: String(position), boundary: boundary)
+        body.imageBody(image: imageData, boundary: boundary, filename: "image")
         body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
         
         request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)

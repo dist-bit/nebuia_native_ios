@@ -16,8 +16,8 @@ extension Data {
     
     mutating func valueBody(key: String, value: String, boundary: String) {
         self.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-        self.append("Content-Disposition: form-data; name=\(key)\r\n\r\n".data(using: .utf8)!)
-        self.append("\(value)\r\n".data(using: .utf8)!)
+        self.append("Content-Disposition: form-data; name=\(key)\r\n".data(using: .utf8)!)
+        self.append("\r\n\(value)".data(using: .utf8)!)
         //self.httpBody = body
     }
     
