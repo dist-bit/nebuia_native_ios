@@ -8,13 +8,13 @@
 import Foundation
 
 public class Finger {
-    var image: UIImage?
-    var name: String?
-    var nfiq: Int?
-    init(image: UIImage, name: String, nfiq: Int) {
+    public var image: UIImage?
+    public var name: String?
+    public var score: Int?
+    init(image: UIImage, name: String, score: Int) {
         self.image = image
         self.name = name
-        self.nfiq = nfiq
+        self.score = score
     }
 }
 

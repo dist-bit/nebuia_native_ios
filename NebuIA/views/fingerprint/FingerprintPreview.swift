@@ -41,7 +41,7 @@ public class FingerprintPreviewController: UIViewController {
     private var retake: UIButton!
     
     var onDismmisBlock : (() -> Void)?
-    var onCompleteBlock : ((UIImage, UIImage, UIImage, UIImage) -> Void)?
+    var onCompleteBlock : ((Finger, Finger, Finger, Finger) -> Void)?
     var errorAlert: Bool = false;
     
     @IBAction func goBack(_ sender: UIButton) {
@@ -49,7 +49,7 @@ public class FingerprintPreviewController: UIViewController {
     }
     
     @IBAction func continueFinger(_ sender: UIButton) {
-        self.onCompleteBlock!(image_preview_index.image!, image_preview_middle.image!, image_preview_ring.image!, image_preview_little.image!)
+        self.onCompleteBlock!(fingers[0], fingers[1], fingers[2], fingers[3])
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -126,7 +126,7 @@ public class FingerprintPreviewController: UIViewController {
         self.nfiq_preview_index.adjustsFontSizeToFitWidth = true
         self.nfiq_preview_index.textColor = .black
         self.nfiq_preview_index.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 8), weight: .regular)
-        self.nfiq_preview_index.text = "NFIQ \(String(describing:  fingers[0].nfiq!))"
+        self.nfiq_preview_index.text = "NFIQ \(String(describing:  fingers[0].score!))"
 
     }
     
@@ -144,7 +144,7 @@ public class FingerprintPreviewController: UIViewController {
         self.nfiq_preview_middle.adjustsFontSizeToFitWidth = true
         self.nfiq_preview_middle.textColor = .black
         self.nfiq_preview_middle.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 8), weight: .regular)
-        self.nfiq_preview_middle.text = "NFIQ \(String(describing: fingers[1].nfiq!))"
+        self.nfiq_preview_middle.text = "NFIQ \(String(describing: fingers[1].score!))"
     }
     
     private func buildImageRing() {
@@ -161,7 +161,7 @@ public class FingerprintPreviewController: UIViewController {
         self.nfiq_preview_ring.adjustsFontSizeToFitWidth = true
         self.nfiq_preview_ring.textColor = .black
         self.nfiq_preview_ring.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 8), weight: .regular)
-        self.nfiq_preview_ring.text = "NFIQ \(String(describing: fingers[2].nfiq!))"
+        self.nfiq_preview_ring.text = "NFIQ \(String(describing: fingers[2].score!))"
     
     }
     
@@ -179,7 +179,7 @@ public class FingerprintPreviewController: UIViewController {
         self.nfiq_preview_little.adjustsFontSizeToFitWidth = true
         self.nfiq_preview_little.textColor = .black
         self.nfiq_preview_little.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 8), weight: .regular)
-        self.nfiq_preview_little.text = "NFIQ \(String(describing: fingers[3].nfiq!))"
+        self.nfiq_preview_little.text = "NFIQ \(String(describing: fingers[3].score!))"
     }
     
     private func buildStatusComponents() {

@@ -43,7 +43,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     
     private var detections_count: [Int] = []
     
-    var onCompleteFingerprint : ((UIImage, UIImage, UIImage, UIImage) -> Void)?
+    var onCompleteFingerprint : ((Finger, Finger, Finger, Finger) -> Void)?
     
     @IBAction func goBack(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -327,7 +327,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         }
     }
     
-    private func onCompleteUpload(index: UIImage, middle: UIImage, ring: UIImage, little: UIImage) {
+    private func onCompleteUpload(index: Finger, middle: Finger, ring: Finger, little: Finger) {
         self.complete = true
         self.onCompleteFingerprint!(index, middle, ring, little)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -390,7 +390,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                                         Finger(
                                             image: self.getImageFromBase64(b64: item["image"] as! String),
                                             name: item["name"]! as! String,
-                                            nfiq: item["nfiq"]! as! Int
+                                            score: item["nfiq"]! as! Int
                                         )
                                     )
                                 }

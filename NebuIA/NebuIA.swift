@@ -158,7 +158,7 @@ public class NebuIA {
         }
     }
     
-    public func fingerprintScanner(hand: Int, completion: ((UIImage, UIImage, UIImage, UIImage) -> Void)? = nil) {
+    public func fingerprintScanner(hand: Int, completion: ((Finger, Finger, Finger, Finger) -> Void)? = nil) {
         let fingerprintController = FingerprintScannerController()
         fingerprintController.detector = detector
         fingerprintController.client = client
