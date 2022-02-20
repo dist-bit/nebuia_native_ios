@@ -50,7 +50,7 @@ public class AddressPreviewController: UIViewController {
                 self.hideLoading()
                 if status {
                     let payload = data as! Dictionary<String, Any>
-                    self.onCompleteBlock!(payload["payload"] as! Dictionary<String, Any>);
+                    self.onCompleteBlock!(payload);
                 } else {
                     self.onErrorBlock!()
                 }
@@ -63,7 +63,7 @@ public class AddressPreviewController: UIViewController {
                 self.hideLoading()
                 if status {
                     let payload = data as! Dictionary<String, Any>
-                    self.onCompleteBlock!(payload["payload"] as! Dictionary<String, Any>);
+                    self.onCompleteBlock!(payload);
                 } else {
                     self.onErrorBlock!()
                 }
