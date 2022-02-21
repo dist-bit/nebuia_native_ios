@@ -16,7 +16,7 @@ public class Client {
     var apiSecret: String;
     var code: String = "";
     var report: String = "";
-    var base: String = "https://api.nebuia.com/api/v1/services/"
+    var base: String = "https://api.nebuia.com/api/v1/services"
     
     init(publicKey: String, secretKey: String) {
         self.apiKey = publicKey
@@ -28,7 +28,7 @@ public class Client {
     }
     
     func createReport(completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)report")!
+        let url = URL(string: "/\(base)report")!
         var request = URLRequest(url: url)
         request.emptyPOST(apiKey: apiKey, apiSecret: apiSecret, code: code)
         let session = URLSession(configuration: .default)
@@ -46,7 +46,7 @@ public class Client {
     }
     
     func faceScanner(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)face?report=\(report)")!
+        let url = URL(string: "/\(base)face?report=\(report)")!
         var request = URLRequest(url: url)
         
         guard let imageData = SDImageWebPCoder.shared.encodedData(with: image, format: .webP, options: nil) else {
@@ -73,7 +73,7 @@ public class Client {
     }
     
     func getIDImage(side: SIDE, completion: @escaping (_ data: UIImage?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)docs/\(String(describing: side))?report=\(report)")!
+        let url = URL(string: "/\(base)docs/\(String(describing: side))?report=\(report)")!
         var request = URLRequest(url: url)
         request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
         let session = URLSession(configuration: .default)
@@ -90,36 +90,8 @@ public class Client {
         task.resume()
     }
     
-    func uploadID(front: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)crop?report=\(report)")!
-        var request = URLRequest(url: url)
-        
-        guard let imageData =  SDImageWebPCoder.shared.encodedData(with: front, format: .webP, options: nil) else {
-            return
-        }
-        
-        var body = Data()
-        body.imageBody(image: imageData, boundary: boundary, filename: "front")
-        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
-        
-        request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)
-        let session = URLSession(configuration: .default)
-        
-        let task = session.uploadTask(with: request,from: body) { data, response, error in
-            guard let data = data,
-                  error == nil else {
-                completion(nil, error)
-                return
-            }
-            
-            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
-            completion(json, error)
-        }
-        task.resume()
-    }
-    
     func uploadID(front: UIImage, back: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)id?report=\(report)")!
+        let url = URL(string: "/\(base)id?report=\(report)")!
         var request = URLRequest(url: url)
         
         guard let frontData = SDImageWebPCoder.shared.encodedData(with: front, format: .webP, options: nil) else {
@@ -153,7 +125,7 @@ public class Client {
     }
     
     func uploadAddressImage(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)address?report=\(report)")!
+        let url = URL(string: "/\(base)address?report=\(report)")!
         var request = URLRequest(url: url)
         guard let imageData = SDImageWebPCoder.shared.encodedData(with: image, format: .webP, options: nil) else {
             return
@@ -180,7 +152,7 @@ public class Client {
     }
     
     func uploadAddressPDF(pdf: Data, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)address?report=\(report)")!
+        let url = URL(string: "/\(base)address?report=\(report)")!
         var request = URLRequest(url: url)
         
         var body = Data()
@@ -204,7 +176,7 @@ public class Client {
     }
     
     func saveAddress(address: String, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)address?report=\(report)")!
+        let url = URL(string: "/\(base)address?report=\(report)")!
         var request = URLRequest(url: url)
         request.put(apiKey: apiKey, apiSecret: apiSecret, code: code)
         
@@ -227,7 +199,7 @@ public class Client {
     }
     
     func fingerprints(image: UIImage, position: Int, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)fingerprints?report=\(report)")!
+        let url = URL(string: "/\(base)fingerprints?report=\(report)")!
         var request = URLRequest(url: url)
         guard let imageData = SDImageWebPCoder.shared.encodedData(with: image, format: .webP, options: nil) else {
             return
@@ -253,7 +225,7 @@ public class Client {
     }
     
     func fingerprintNfiq(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)nfiq?report=\(report)")!
+        let url = URL(string: "/\(base)nfiq?report=\(report)")!
         var request = URLRequest(url: url)
         guard let imageData = SDImageWebPCoder.shared.encodedData(with: image, format: .webP, options: nil) else {
             return
@@ -278,7 +250,7 @@ public class Client {
     }
     
     func getFaceImage(completion: @escaping (_ data: UIImage?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)faces/?report=\(report)")!
+        let url = URL(string: "/\(base)faces/?report=\(report)")!
         var request = URLRequest(url: url)
         request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
         let session = URLSession(configuration: .default)
@@ -296,7 +268,7 @@ public class Client {
     }
     
     func getReportSummary(completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)report/?report=\(report)")!
+        let url = URL(string: "/\(base)report/?report=\(report)")!
         var request = URLRequest(url: url)
         request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
         let session = URLSession(configuration: .default)
@@ -315,7 +287,7 @@ public class Client {
     }
     
     func getFingerprintWSQ(image: UIImage, completion: @escaping (_ data: Data?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)wsq?report=\(report)")!
+        let url = URL(string: "/\(base)wsq?report=\(report)")!
         var request = URLRequest(url: url)
         guard let imageData = SDImageWebPCoder.shared.encodedData(with: image, format: .webP, options: nil) else {
             return
@@ -340,7 +312,7 @@ public class Client {
     }
     
     func saveEmail(email: String, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)email?report=\(report)")!
+        let url = URL(string: "/\(base)email?report=\(report)")!
         var request = URLRequest(url: url)
         request.put(apiKey: apiKey, apiSecret: apiSecret, code: code)
         
@@ -363,7 +335,7 @@ public class Client {
     }
     
     func savePhone(phone: String, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)phone?report=\(report)")!
+        let url = URL(string: "/\(base)phone?report=\(report)")!
         var request = URLRequest(url: url)
         request.put(apiKey: apiKey, apiSecret: apiSecret, code: code)
         
@@ -386,7 +358,7 @@ public class Client {
     }
     
     func sentEmailOTP(completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)otp/generate/email?report=\(report)")!
+        let url = URL(string: "/\(base)otp/generate/email?report=\(report)")!
         var request = URLRequest(url: url)
         request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
         let session = URLSession(configuration: .default)
@@ -404,7 +376,7 @@ public class Client {
     }
     
     func sentPhoneOTP(completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)otp/generate/phone?report=\(report)")!
+        let url = URL(string: "/\(base)otp/generate/phone?report=\(report)")!
         var request = URLRequest(url: url)
         request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
         let session = URLSession(configuration: .default)
@@ -422,7 +394,7 @@ public class Client {
     }
     
     func validateEmailOTP(otp: String, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)otp/validate/email/\(otp)?report=\(report)")!
+        let url = URL(string: "/\(base)otp/validate/email/\(otp)?report=\(report)")!
         var request = URLRequest(url: url)
         request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
         let session = URLSession(configuration: .default)
@@ -440,7 +412,7 @@ public class Client {
     }
     
     func validatePhoneOTP(otp: String, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)otp/validate/phone/\(otp)?report=\(report)")!
+        let url = URL(string: "/\(base)otp/validate/phone/\(otp)?report=\(report)")!
         var request = URLRequest(url: url)
         request.get(apiKey: apiKey, apiSecret: apiSecret, code: code)
         let session = URLSession(configuration: .default)
