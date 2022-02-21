@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImageWebPCoder
 
 public class Client {
     //private var base: String = "https://api.nebuia.com/api/v1/services/"
@@ -48,8 +49,8 @@ public class Client {
         let url = URL(string: "\(base)face?report=\(report)")!
         var request = URLRequest(url: url)
         
-        guard let imageData = image.jpegData(compressionQuality: 85.0) else {
-                    return
+        guard let imageData = SDImageWebPCoder.shared.encodedData(with: image, format: .webP, options: nil) else {
+            return
         }
         
         var body = Data()
@@ -93,8 +94,8 @@ public class Client {
         let url = URL(string: "\(base)crop?report=\(report)")!
         var request = URLRequest(url: url)
         
-        guard let imageData = front.jpegData(compressionQuality: 90.0) else {
-                    return
+        guard let imageData =  SDImageWebPCoder.shared.encodedData(with: front, format: .webP, options: nil) else {
+            return
         }
         
         var body = Data()
@@ -121,12 +122,12 @@ public class Client {
         let url = URL(string: "\(base)id?report=\(report)")!
         var request = URLRequest(url: url)
         
-        guard let frontData = front.jpegData(compressionQuality: 90.0) else {
-                    return
+        guard let frontData = SDImageWebPCoder.shared.encodedData(with: front, format: .webP, options: nil) else {
+            return
         }
         
-        guard let backData = back.jpegData(compressionQuality: 90.0) else {
-                    return
+        guard let backData = SDImageWebPCoder.shared.encodedData(with: back, format: .webP, options: nil) else {
+            return
         }
         
         var body = Data()
@@ -154,8 +155,8 @@ public class Client {
     func uploadAddressImage(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
         let url = URL(string: "\(base)address?report=\(report)")!
         var request = URLRequest(url: url)
-        guard let imageData = image.jpegData(compressionQuality: 85.0) else {
-                    return
+        guard let imageData = SDImageWebPCoder.shared.encodedData(with: image, format: .webP, options: nil) else {
+            return
         }
         
         var body = Data()
@@ -228,8 +229,8 @@ public class Client {
     func fingerprints(image: UIImage, position: Int, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
         let url = URL(string: "\(base)fingerprints?report=\(report)")!
         var request = URLRequest(url: url)
-        guard let imageData = image.jpegData(compressionQuality: 100.0) else {
-                    return
+        guard let imageData = SDImageWebPCoder.shared.encodedData(with: image, format: .webP, options: nil) else {
+            return
         }
         
         var body = Data()
@@ -254,8 +255,8 @@ public class Client {
     func fingerprintNfiq(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
         let url = URL(string: "\(base)nfiq?report=\(report)")!
         var request = URLRequest(url: url)
-        guard let imageData = image.jpegData(compressionQuality: 100.0) else {
-                    return
+        guard let imageData = SDImageWebPCoder.shared.encodedData(with: image, format: .webP, options: nil) else {
+            return
         }
         
         var body = Data()
@@ -316,8 +317,8 @@ public class Client {
     func getFingerprintWSQ(image: UIImage, completion: @escaping (_ data: Data?, _ error: Error?)->()) {
         let url = URL(string: "\(base)wsq?report=\(report)")!
         var request = URLRequest(url: url)
-        guard let imageData = image.jpegData(compressionQuality: 100.0) else {
-                    return
+        guard let imageData = SDImageWebPCoder.shared.encodedData(with: image, format: .webP, options: nil) else {
+            return
         }
         
         var body = Data()
