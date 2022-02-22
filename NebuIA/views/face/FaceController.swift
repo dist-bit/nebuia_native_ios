@@ -176,7 +176,7 @@ public class FaceController: UIViewController, AVCaptureVideoDataOutputSampleBuf
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         captureSession = AVCaptureSession()
-        captureSession.sessionPreset = .photo
+        captureSession.sessionPreset = .medium
         
         
         guard let frontCamera = AVCaptureDevice.default(
