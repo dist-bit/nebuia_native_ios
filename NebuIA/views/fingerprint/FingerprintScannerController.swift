@@ -99,7 +99,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         summary_label.adjustsFontSizeToFitWidth = true
         summary_label.textColor = UIColor(rgb: 0x7d82a8)
         summary_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 12), weight: .regular)
-        summary_label.text = "Coloca tu mano sobre la cámara enfocando tus 4 dedos de tu mano hasta resaltar tus huellas dactilares"
+        summary_label.text = "Coloca tu mano sobre la cámara enfocando tus 4 dedos de tu mano hasta resaltar tus huellas dactilares lo más cerca posible"
     }
     
     private func buildLogoBottom() {
@@ -404,6 +404,11 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                                     self.removeSpinner()
                                     self.detecting = false
                                 }
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                self.removeSpinner()
+                                self.detecting = false
                             }
                         }
                     })

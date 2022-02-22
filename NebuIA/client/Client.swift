@@ -36,9 +36,9 @@ public class Client {
         let task = session.dataTask(with: request) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
         }
@@ -62,9 +62,9 @@ public class Client {
         let task = session.uploadTask(with: request,from: body) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
@@ -81,9 +81,9 @@ public class Client {
         let task = session.dataTask(with: request) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             let image = UIImage(data: data)
             completion(image, error)
         }
@@ -114,9 +114,9 @@ public class Client {
         let task = session.uploadTask(with: request,from: body) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
@@ -125,32 +125,32 @@ public class Client {
     }
     
     func uploadID(front: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-             let url = URL(string: "\(base)/id?report=\(report)")!
-             var request = URLRequest(url: url)
-
-             guard let imageData =  SDImageWebPCoder.shared.encodedData(with: front, format: .webP, options: nil) else {
-                 return
-             }
-
-             var body = Data()
-             body.imageBody(image: imageData, boundary: boundary, filename: "front")
-             body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
-
-             request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)
-             let session = URLSession(configuration: .default)
-
-             let task = session.uploadTask(with: request,from: body) { data, response, error in
-                 guard let data = data,
-                       error == nil else {
-                     completion(nil, error)
-                     return
-                 }
-
-                 let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                 completion(json, error)
-             }
-             task.resume()
-         }
+        let url = URL(string: "\(base)/id?report=\(report)")!
+        var request = URLRequest(url: url)
+        
+        guard let imageData =  SDImageWebPCoder.shared.encodedData(with: front, format: .webP, options: nil) else {
+            return
+        }
+        
+        var body = Data()
+        body.imageBody(image: imageData, boundary: boundary, filename: "front")
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.uploadTask(with: request,from: body) { data, response, error in
+            guard let data = data,
+                  error == nil else {
+                      completion(nil, error)
+                      return
+                  }
+            
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+            completion(json, error)
+        }
+        task.resume()
+    }
     
     func uploadAddressImage(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
         let url = URL(string: "\(base)/address?report=\(report)")!
@@ -169,9 +169,9 @@ public class Client {
         let task = session.uploadTask(with: request,from: body) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
@@ -193,9 +193,9 @@ public class Client {
         let task = session.uploadTask(with: request,from: body) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
@@ -217,9 +217,9 @@ public class Client {
         let task = session.dataTask(with: request) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
         }
@@ -243,13 +243,20 @@ public class Client {
         let task = session.uploadTask(with: request,from: body) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
+                      completion(nil, error)
+                      return
+                  }
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                completion(json, error)
+            } catch {
+                let errorTemp = NSError(domain:"", code:200, userInfo:nil)
+                completion(nil, errorTemp)
             }
-            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
-            completion(json, error)
         }
         task.resume()
+        
     }
     
     func fingerprintNfiq(image: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
@@ -268,9 +275,9 @@ public class Client {
         let task = session.uploadTask(with: request,from: body) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
         }
@@ -286,9 +293,9 @@ public class Client {
         let task = session.dataTask(with: request) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             let image = UIImage(data: data)
             completion(image, error)
         }
@@ -304,9 +311,9 @@ public class Client {
         let task = session.dataTask(with: request) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
@@ -330,10 +337,10 @@ public class Client {
         let task = session.uploadTask(with: request,from: body) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
-
+                      completion(nil, error)
+                      return
+                  }
+            
             completion(data, error)
         }
         task.resume()
@@ -353,9 +360,9 @@ public class Client {
         let task = session.dataTask(with: request) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
         }
@@ -376,9 +383,9 @@ public class Client {
         let task = session.dataTask(with: request) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
         }
@@ -394,9 +401,9 @@ public class Client {
         let task = session.dataTask(with: request) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
         }
@@ -412,9 +419,9 @@ public class Client {
         let task = session.dataTask(with: request) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
         }
@@ -430,9 +437,9 @@ public class Client {
         let task = session.dataTask(with: request) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
         }
@@ -448,9 +455,9 @@ public class Client {
         let task = session.dataTask(with: request) { data, response, error in
             guard let data = data,
                   error == nil else {
-                completion(nil, error)
-                return
-            }
+                      completion(nil, error)
+                      return
+                  }
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             completion(json, error)
         }
