@@ -206,7 +206,7 @@ public class FingerprintPreviewController: UIViewController {
         subtitle_label.minimumScaleFactor = 10/UIFont.labelFontSize
         subtitle_label.adjustsFontSizeToFitWidth = true
         subtitle_label.textColor = .black
-        subtitle_label.text = "Tus hellas han sido capturadas"
+        subtitle_label.text = "Tus huellas han sido capturadas"
         subtitle_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 12), weight: .semibold)
     }
     
