@@ -149,7 +149,7 @@ public class NebuIA {
                 let dict = data as! Dictionary<String, Any>
                 let response = dict["payload"]!
                 if(response is NSDictionary) {
-                    completion!(response as! NSDictionary)
+                    completion!(dict as NSDictionary)
                 }
                 else {
                     onError!(response as! String)
