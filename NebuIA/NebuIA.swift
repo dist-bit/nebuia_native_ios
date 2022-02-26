@@ -137,6 +137,7 @@ public class NebuIA {
     public func takeAddress(completion: ((Dictionary<String, Any>) -> Void)? = nil, error: (() -> Void)? = nil) {
         let addressController = AddressScannerController()
         addressController.client = client
+        addressController.detector = detector
         addressController.address = address
         addressController.onComplete = completion
         addressController.onError = error

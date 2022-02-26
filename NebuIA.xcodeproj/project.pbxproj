@@ -43,6 +43,7 @@
 		054DC0AE273EE7D500330B59 /* UploadIDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC0A4273EE7D500330B59 /* UploadIDController.swift */; };
 		054DC0B6273EE86E00330B59 /* ncnn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 054DC0B5273EE86E00330B59 /* ncnn.framework */; };
 		054DC0BA273EE8C200330B59 /* openmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 054DC0B7273EE87800330B59 /* openmp.framework */; };
+		05C64F6527C9B6140091B99F /* Document.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 05C64F6327C9B6140091B99F /* Document.hpp */; };
 		490522772686478200617471 /* NebuIA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490522762686478200617471 /* NebuIA.swift */; };
 		490706C92688CA0200F1CF28 /* nebuia_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 490706C82688CA0200F1CF28 /* nebuia_black.png */; };
 		49608B0C2684E558004F9365 /* nebuia_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 49608B072684E558004F9365 /* nebuia_white.png */; };
@@ -90,6 +91,7 @@
 		054DC0B2273EE85E00330B59 /* openmp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openmp.framework; sourceTree = "<group>"; };
 		054DC0B5273EE86E00330B59 /* ncnn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ncnn.framework; sourceTree = "<group>"; };
 		054DC0B7273EE87800330B59 /* openmp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openmp.framework; sourceTree = "<group>"; };
+		05C64F6327C9B6140091B99F /* Document.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; path = Document.hpp; sourceTree = "<group>"; };
 		490522762686478200617471 /* NebuIA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NebuIA.swift; sourceTree = "<group>"; };
 		490706C82688CA0200F1CF28 /* nebuia_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nebuia_black.png; sourceTree = "<group>"; };
 		49608B072684E558004F9365 /* nebuia_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nebuia_white.png; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				054DC088273EE7CD00330B59 /* Id.h */,
 				054DC089273EE7CD00330B59 /* Detection.h */,
 				054DC08A273EE7CD00330B59 /* Face.h */,
+				05C64F6327C9B6140091B99F /* Document.hpp */,
 			);
 			path = ncnn;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				054DC090273EE7CD00330B59 /* DetectorWrapper.h in Headers */,
+				05C64F6527C9B6140091B99F /* Document.hpp in Headers */,
 				054DC08B273EE7CD00330B59 /* Inference.h in Headers */,
 				054DC093273EE7CD00330B59 /* Detection.h in Headers */,
 				054DC094273EE7CD00330B59 /* Face.h in Headers */,

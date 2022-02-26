@@ -13,6 +13,7 @@
 @property Face *face;
 //
 @property Inference *IDInference;
+@property Inference *DocumentInference;
 @property Inference *FingerInference;
 @end
 
@@ -26,6 +27,7 @@
         self.finger = new Finger();
         self.face = new Face();
         self.IDInference = new Inference(@"det0");
+        self.DocumentInference = new Inference(@"det2");
         self.FingerInference = new Inference(@"det3");
     }
     return self;
@@ -36,6 +38,25 @@
     NSMutableArray<Detection *> *detections = [[NSMutableArray alloc] init];
     std::vector<Object> boxs;
     boxs = self.IDInference->detect(image);
+    for (int i = 0; i < boxs.size(); i++) {
+        Object box = boxs[i];
+        NSString *label = [NSString stringWithUTF8String:self.id->labels[box.label].c_str()];
+        CGFloat score = (CGFloat)box.prob;
+        CGFloat x1 = (CGFloat)box.x;
+        CGFloat y1 = (CGFloat)box.y;
+        CGFloat x2 = (CGFloat)box.w;
+        CGFloat y2 = (CGFloat)box.h;
+        Detection * detection = [[Detection alloc]initWithParams:label score:score x1:x1 y1:y1 x2:x2 y2:y2];
+        [detections addObject:detection];
+    }
+    return detections;
+}
+
+- (NSArray<Detection *> *)detectDocument:(UIImage *)image {
+
+    NSMutableArray<Detection *> *detections = [[NSMutableArray alloc] init];
+    std::vector<Object> boxs;
+    boxs = self.DocumentInference->detect(image);
     for (int i = 0; i < boxs.size(); i++) {
         Object box = boxs[i];
         NSString *label = [NSString stringWithUTF8String:self.id->labels[box.label].c_str()];

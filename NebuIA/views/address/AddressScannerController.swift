@@ -20,6 +20,7 @@ public class AddressScannerController: UIViewController,  AVCaptureVideoDataOutp
     
     var client: Client!
     var address: Address!
+    var detector: DetectorWrapper!
     
     private var detecting: Bool = false
     private var complete: Bool = false
@@ -481,8 +482,19 @@ public class AddressScannerController: UIViewController,  AVCaptureVideoDataOutp
     public func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         if(self.detecting) {
             self.detecting = false
-            address.setImage(data: sampleBuffer.toUIImage())
+            let image = sampleBuffer.toUIImage()
+            
+            let detections = detector.detectDocument(image)
+            
+            if(!detections.isEmpty) {
+                let crop = image.crop(rect: detections[0].rect())
+                address.setImage(data: crop)
+            } else {
+                address.setImage(data: image)
+            }
             self.previewImage()
+            
+        
         }
     }
 }
