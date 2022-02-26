@@ -9,7 +9,6 @@
 
 @interface DetectorWrapper()
 @property Id *id;
-@property Finger *finger;
 @property Face *face;
 //
 @property Inference *IDInference;
@@ -24,7 +23,6 @@
 - (instancetype)init {
     if (self = [super init]) {
         self.id = new Id();
-        self.finger = new Finger();
         self.face = new Face();
         self.IDInference = new Inference(@"det0");
         self.DocumentInference = new Inference(@"det2");
@@ -59,7 +57,7 @@
     boxs = self.DocumentInference->detect(image);
     for (int i = 0; i < boxs.size(); i++) {
         Object box = boxs[i];
-        NSString *label = [NSString stringWithUTF8String:self.id->labels[box.label].c_str()];
+        NSString *label = [NSString stringWithUTF8String:"document"];
         CGFloat score = (CGFloat)box.prob;
         CGFloat x1 = (CGFloat)box.x;
         CGFloat y1 = (CGFloat)box.y;
@@ -78,7 +76,7 @@
     boxs = self.FingerInference->detect(image);
     for (int i = 0; i < boxs.size(); i++) {
         Object box = boxs[i];
-        NSString *label = [NSString stringWithUTF8String:self.finger->labels[box.label].c_str()];
+        NSString *label = [NSString stringWithUTF8String:"finger"];
         CGFloat score = (CGFloat)box.prob;
         CGFloat x1 = (CGFloat)box.x;
         CGFloat y1 = (CGFloat)box.y;

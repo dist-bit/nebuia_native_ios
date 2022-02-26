@@ -8,7 +8,6 @@
 #import <UIKit/UIKit.h>
 #import "Detection.h"
 #import "Id.h"
-#import "Finger.h"
 #import "Face.h"
 #import "Inference.h"
 
