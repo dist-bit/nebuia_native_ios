@@ -41,8 +41,6 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     
     private var device: AVCaptureDevice!
     
-    private var detections_count: [Int] = []
-    
     var onCompleteFingerprint : ((Finger, Finger, Finger, Finger) -> Void)?
     
     @IBAction func goBack(_ sender: UIButton) {
@@ -242,9 +240,9 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         captureSession.sessionPreset = .photo
         
         guard let camera = AVCaptureDevice.default(
-                .builtInWideAngleCamera,
-                for: AVMediaType.video,
-                position: .back)
+            .builtInWideAngleCamera,
+            for: AVMediaType.video,
+            position: .back)
         else {
             print("Unable to access back camera!")
             return
@@ -346,64 +344,61 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
             self.detecting = true
             
             let image = sampleBuffer.toUIImage()
-            let detections = detector.detectFingerprints(image)
+            let detections = detector.detectFingerprints(image) as [Detection]
             
             
             var rects = [CGRect]()
             
-            if(detections.count >= 4) {
-                
-                rects.append(detections[0].rect())
-                rects.append(detections[1].rect())
-                rects.append(detections[2].rect())
-                rects.append(detections[3].rect())
-                
-                
-                if(rects.count == 4) {
-                    detections_count.append(rects.count)
-                } else {
-                    rects.removeAll()
-                    detections_count.removeAll()
+            var score : Float = 0
+            if(detections.count == 4) {
+                for i in 0 ..< detections.count {
+                    let detection = detections[i]
+                    rects.append(detection.rect())
+                    let crop = image.crop(rect: detection.rect())
+                    let rotate = crop.rotate(radians: position == 0 ? -1.5708 : 1.5708)
+                    
+                    score += detector.qualityFingerprint(rotate!)
                 }
                 
-                if(detections_count.count >= 55) {
-                    Vibration.success.vibrate()
-                    detections_count.removeAll()
-                    rects.removeAll()
-                    
-                    // show loading modal
-                    DispatchQueue.main.async {
-                        self.showSpinner(onView: self.view)
-                    }
-                    
-                    // get image
-                    client.fingerprints(image: image, position: position, completion: { data, error in
-                        if error == nil {
-                            let dict = data as! Dictionary<String, Any>
-                            
-                            if dict["status"] as! Bool {
-                                let payload = dict["payload"] as! Dictionary<String, Any>
-                                let result =  payload["fingers"] as! Array<Dictionary<String, Any>>
-                                var fingers = [Finger]()
-                                for item in result {
-                                    fingers.append(
-                                        Finger(
-                                            image: self.getImageFromBase64(b64: item["image"] as! String),
-                                            name: item["name"]! as! String,
-                                            score: item["nfiq"]! as! Int
-                                        )
+            }
+            
+            // draw fingerprints
+            DispatchQueue.main.async {
+                self.detections_view.image = self.drawOccurrencesOnImage(rects, UIImage.emptyImage(with: image.size)!)
+            }
+            
+            if score > 150 {
+                
+                Vibration.success.vibrate()
+                rects.removeAll()
+                
+                // show loading modal
+                DispatchQueue.main.async {
+                    self.showSpinner(onView: self.view)
+                }
+                
+                // get image
+                client.fingerprints(image: image, position: position, completion: { data, error in
+                    if error == nil {
+                        let dict = data as! Dictionary<String, Any>
+                        
+                        if dict["status"] as! Bool {
+                            let payload = dict["payload"] as! Dictionary<String, Any>
+                            let result =  payload["fingers"] as! Array<Dictionary<String, Any>>
+                            var fingers = [Finger]()
+                            for item in result {
+                                fingers.append(
+                                    Finger(
+                                        image: self.getImageFromBase64(b64: item["image"] as! String),
+                                        name: item["name"]! as! String,
+                                        score: item["nfiq"]! as! Int
                                     )
-                                }
-                                
-                                DispatchQueue.main.async {
-                                    self.removeSpinner()
-                                    self.previewResult(fingers: fingers)
-                                }
-                            } else {
-                                DispatchQueue.main.async {
-                                    self.removeSpinner()
-                                    self.detecting = false
-                                }
+                                )
+                            }
+                            
+                            DispatchQueue.main.async {
+                                self.removeSpinner()
+                                self.previewResult(fingers: fingers)
                             }
                         } else {
                             DispatchQueue.main.async {
@@ -411,16 +406,16 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                                 self.detecting = false
                             }
                         }
-                    })
-                } else {
-                    self.detecting = false
-                }
+                    } else {
+                        DispatchQueue.main.async {
+                            self.removeSpinner()
+                            self.detecting = false
+                        }
+                    }
+                })
+                
             } else {
                 self.detecting = false
-            }
-            
-            DispatchQueue.main.async {
-                self.detections_view.image = self.drawOccurrencesOnImage(rects, UIImage.emptyImage(with: image.size)!)
             }
         }
     }

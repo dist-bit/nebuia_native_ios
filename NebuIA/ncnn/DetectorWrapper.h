@@ -10,12 +10,14 @@
 #import "Id.h"
 #import "Face.h"
 #import "Inference.h"
+#import "quality.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DetectorWrapper : NSObject
 - (NSArray<Detection *> *)detectID:(UIImage *)image;
 - (NSArray<Detection *> *)detectFingerprints:(UIImage *)image;
+- (float)qualityFingerprint:(UIImage *)image;
 - (NSArray<Detection *> *)detectFace:(UIImage *)image;
 - (NSArray<Detection *> *)detectDocument:(UIImage *)image;
 @end

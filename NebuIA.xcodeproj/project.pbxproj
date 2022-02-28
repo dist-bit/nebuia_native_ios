@@ -42,6 +42,8 @@
 		054DC0AE273EE7D500330B59 /* UploadIDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC0A4273EE7D500330B59 /* UploadIDController.swift */; };
 		054DC0B6273EE86E00330B59 /* ncnn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 054DC0B5273EE86E00330B59 /* ncnn.framework */; };
 		054DC0BA273EE8C200330B59 /* openmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 054DC0B7273EE87800330B59 /* openmp.framework */; };
+		05CD856D27CC551500D718B0 /* quality.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 05CD856B27CC551500D718B0 /* quality.cpp */; };
+		05CD856E27CC551500D718B0 /* quality.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CD856C27CC551500D718B0 /* quality.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		490522772686478200617471 /* NebuIA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490522762686478200617471 /* NebuIA.swift */; };
 		490706C92688CA0200F1CF28 /* nebuia_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 490706C82688CA0200F1CF28 /* nebuia_black.png */; };
 		49608B0C2684E558004F9365 /* nebuia_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 49608B072684E558004F9365 /* nebuia_white.png */; };
@@ -88,6 +90,8 @@
 		054DC0B2273EE85E00330B59 /* openmp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openmp.framework; sourceTree = "<group>"; };
 		054DC0B5273EE86E00330B59 /* ncnn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ncnn.framework; sourceTree = "<group>"; };
 		054DC0B7273EE87800330B59 /* openmp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openmp.framework; sourceTree = "<group>"; };
+		05CD856B27CC551500D718B0 /* quality.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = quality.cpp; sourceTree = "<group>"; };
+		05CD856C27CC551500D718B0 /* quality.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = quality.h; sourceTree = "<group>"; };
 		490522762686478200617471 /* NebuIA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NebuIA.swift; sourceTree = "<group>"; };
 		490706C82688CA0200F1CF28 /* nebuia_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nebuia_black.png; sourceTree = "<group>"; };
 		49608B072684E558004F9365 /* nebuia_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nebuia_white.png; sourceTree = "<group>"; };
@@ -161,6 +165,8 @@
 				054DC088273EE7CD00330B59 /* Id.h */,
 				054DC089273EE7CD00330B59 /* Detection.h */,
 				054DC08A273EE7CD00330B59 /* Face.h */,
+				05CD856C27CC551500D718B0 /* quality.h */,
+				05CD856B27CC551500D718B0 /* quality.cpp */,
 			);
 			path = ncnn;
 			sourceTree = "<group>";
@@ -298,6 +304,7 @@
 				054DC093273EE7CD00330B59 /* Detection.h in Headers */,
 				054DC094273EE7CD00330B59 /* Face.h in Headers */,
 				054DC092273EE7CD00330B59 /* Id.h in Headers */,
+				05CD856E27CC551500D718B0 /* quality.h in Headers */,
 				49F0CBAF267FAE5900460B99 /* NebuIA.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -415,6 +422,7 @@
 				054DC0AC273EE7D500330B59 /* DocumentIDPreview.swift in Sources */,
 				054DC067273EE7B500330B59 /* DataExtension.swift in Sources */,
 				054DC091273EE7CD00330B59 /* Face.mm in Sources */,
+				05CD856D27CC551500D718B0 /* quality.cpp in Sources */,
 				054DC0AE273EE7D500330B59 /* UploadIDController.swift in Sources */,
 				054DC070273EE7BC00330B59 /* View.swift in Sources */,
 				054DC07D273EE7C300330B59 /* Document.swift in Sources */,

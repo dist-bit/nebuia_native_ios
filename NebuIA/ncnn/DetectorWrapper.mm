@@ -14,6 +14,7 @@
 @property Inference *IDInference;
 @property Inference *DocumentInference;
 @property Inference *FingerInference;
+@property Quality *FingerQuality;
 @end
 
 //Inference *Id::inference = nullptr;
@@ -27,6 +28,7 @@
         self.IDInference = new Inference(@"det0");
         self.DocumentInference = new Inference(@"det2");
         self.FingerInference = new Inference(@"det3");
+        self.FingerQuality = new Quality(@"fingers");
     }
     return self;
 }
@@ -86,6 +88,11 @@
         [detections addObject:detection];
     }
     return detections;
+}
+
+- (float)qualityFingerprint:(UIImage *)image {
+    float score = self.FingerQuality->quality(image);
+    return score;
 }
 
 - (NSArray<Detection *> *)detectFace:(UIImage *)image {
