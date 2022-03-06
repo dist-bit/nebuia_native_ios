@@ -5,6 +5,7 @@
 //  Created by Miguel on 25/06/21.
 //
 
+@available(iOS 13.0, *)
 public class NebuIA {
     
     private var client: Client!

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0513245727D48D9200068045 /* ncnn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0513245427D48D0200068045 /* ncnn.framework */; };
+		0513245A27D48D9600068045 /* openmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 054DC0B2273EE85E00330B59 /* openmp.framework */; };
 		054DC065273EE7B500330B59 /* RequestExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC062273EE7B500330B59 /* RequestExtension.swift */; };
 		054DC066273EE7B500330B59 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC063273EE7B500330B59 /* Client.swift */; };
 		054DC067273EE7B500330B59 /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC064273EE7B500330B59 /* DataExtension.swift */; };
@@ -21,15 +23,15 @@
 		054DC07D273EE7C300330B59 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC079273EE7C300330B59 /* Document.swift */; };
 		054DC07E273EE7C300330B59 /* Finger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC07A273EE7C300330B59 /* Finger.swift */; };
 		054DC07F273EE7C300330B59 /* Side.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC07B273EE7C300330B59 /* Side.swift */; };
-		054DC08B273EE7CD00330B59 /* Inference.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC081273EE7CD00330B59 /* Inference.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		054DC08D273EE7CD00330B59 /* Inference.mm in Sources */ = {isa = PBXBuildFile; fileRef = 054DC083273EE7CD00330B59 /* Inference.mm */; };
-		054DC08E273EE7CD00330B59 /* Detection.m in Sources */ = {isa = PBXBuildFile; fileRef = 054DC084273EE7CD00330B59 /* Detection.m */; };
-		054DC08F273EE7CD00330B59 /* DetectorWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 054DC085273EE7CD00330B59 /* DetectorWrapper.mm */; };
-		054DC090273EE7CD00330B59 /* DetectorWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC086273EE7CD00330B59 /* DetectorWrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		054DC091273EE7CD00330B59 /* Face.mm in Sources */ = {isa = PBXBuildFile; fileRef = 054DC087273EE7CD00330B59 /* Face.mm */; };
-		054DC092273EE7CD00330B59 /* Id.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC088273EE7CD00330B59 /* Id.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		054DC093273EE7CD00330B59 /* Detection.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC089273EE7CD00330B59 /* Detection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		054DC094273EE7CD00330B59 /* Face.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC08A273EE7CD00330B59 /* Face.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		054DC08B273EE7CD00330B59 /* inference.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC081273EE7CD00330B59 /* inference.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		054DC08D273EE7CD00330B59 /* inference.mm in Sources */ = {isa = PBXBuildFile; fileRef = 054DC083273EE7CD00330B59 /* inference.mm */; };
+		054DC08E273EE7CD00330B59 /* detection.m in Sources */ = {isa = PBXBuildFile; fileRef = 054DC084273EE7CD00330B59 /* detection.m */; };
+		054DC08F273EE7CD00330B59 /* detector_wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 054DC085273EE7CD00330B59 /* detector_wrapper.mm */; };
+		054DC090273EE7CD00330B59 /* detector_wrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC086273EE7CD00330B59 /* detector_wrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		054DC091273EE7CD00330B59 /* face.mm in Sources */ = {isa = PBXBuildFile; fileRef = 054DC087273EE7CD00330B59 /* face.mm */; };
+		054DC092273EE7CD00330B59 /* id.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC088273EE7CD00330B59 /* id.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		054DC093273EE7CD00330B59 /* detection.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC089273EE7CD00330B59 /* detection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		054DC094273EE7CD00330B59 /* face.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC08A273EE7CD00330B59 /* face.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054DC0A5273EE7D500330B59 /* VideoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC097273EE7D500330B59 /* VideoController.swift */; };
 		054DC0A6273EE7D500330B59 /* FingerprintPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC099273EE7D500330B59 /* FingerprintPreview.swift */; };
 		054DC0A7273EE7D500330B59 /* FingerprintScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC09A273EE7D500330B59 /* FingerprintScannerController.swift */; };
@@ -40,8 +42,8 @@
 		054DC0AC273EE7D500330B59 /* DocumentIDPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC0A2273EE7D500330B59 /* DocumentIDPreview.swift */; };
 		054DC0AD273EE7D500330B59 /* IDScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC0A3273EE7D500330B59 /* IDScannerController.swift */; };
 		054DC0AE273EE7D500330B59 /* UploadIDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC0A4273EE7D500330B59 /* UploadIDController.swift */; };
-		054DC0B6273EE86E00330B59 /* ncnn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 054DC0B5273EE86E00330B59 /* ncnn.framework */; };
-		054DC0BA273EE8C200330B59 /* openmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 054DC0B7273EE87800330B59 /* openmp.framework */; };
+		05620FD727D4817C00D1CE15 /* quality.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05620FD527D4817C00D1CE15 /* quality.mm */; };
+		05620FD827D4817C00D1CE15 /* quality.h in Headers */ = {isa = PBXBuildFile; fileRef = 05620FD627D4817C00D1CE15 /* quality.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		490522772686478200617471 /* NebuIA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 490522762686478200617471 /* NebuIA.swift */; };
 		490706C92688CA0200F1CF28 /* nebuia_black.png in Resources */ = {isa = PBXBuildFile; fileRef = 490706C82688CA0200F1CF28 /* nebuia_black.png */; };
 		49608B0C2684E558004F9365 /* nebuia_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 49608B072684E558004F9365 /* nebuia_white.png */; };
@@ -51,6 +53,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0513245327D48D0200068045 /* openmp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openmp.framework; sourceTree = "<group>"; };
+		0513245427D48D0200068045 /* ncnn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ncnn.framework; sourceTree = "<group>"; };
 		0533A61E0ABD5121D2DE0E08 /* Pods_NebuIA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NebuIA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		054DC062273EE7B500330B59 /* RequestExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestExtension.swift; sourceTree = "<group>"; };
 		054DC063273EE7B500330B59 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
@@ -66,15 +70,15 @@
 		054DC079273EE7C300330B59 /* Document.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		054DC07A273EE7C300330B59 /* Finger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Finger.swift; sourceTree = "<group>"; };
 		054DC07B273EE7C300330B59 /* Side.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Side.swift; sourceTree = "<group>"; };
-		054DC081273EE7CD00330B59 /* Inference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Inference.h; sourceTree = "<group>"; };
-		054DC083273EE7CD00330B59 /* Inference.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Inference.mm; sourceTree = "<group>"; };
-		054DC084273EE7CD00330B59 /* Detection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Detection.m; sourceTree = "<group>"; };
-		054DC085273EE7CD00330B59 /* DetectorWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DetectorWrapper.mm; sourceTree = "<group>"; };
-		054DC086273EE7CD00330B59 /* DetectorWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetectorWrapper.h; sourceTree = "<group>"; };
-		054DC087273EE7CD00330B59 /* Face.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Face.mm; sourceTree = "<group>"; };
-		054DC088273EE7CD00330B59 /* Id.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Id.h; sourceTree = "<group>"; };
-		054DC089273EE7CD00330B59 /* Detection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Detection.h; sourceTree = "<group>"; };
-		054DC08A273EE7CD00330B59 /* Face.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Face.h; sourceTree = "<group>"; };
+		054DC081273EE7CD00330B59 /* inference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inference.h; sourceTree = "<group>"; };
+		054DC083273EE7CD00330B59 /* inference.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = inference.mm; sourceTree = "<group>"; };
+		054DC084273EE7CD00330B59 /* detection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = detection.m; sourceTree = "<group>"; };
+		054DC085273EE7CD00330B59 /* detector_wrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = detector_wrapper.mm; sourceTree = "<group>"; };
+		054DC086273EE7CD00330B59 /* detector_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = detector_wrapper.h; sourceTree = "<group>"; };
+		054DC087273EE7CD00330B59 /* face.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = face.mm; sourceTree = "<group>"; };
+		054DC088273EE7CD00330B59 /* id.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = id.h; sourceTree = "<group>"; };
+		054DC089273EE7CD00330B59 /* detection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = detection.h; sourceTree = "<group>"; };
+		054DC08A273EE7CD00330B59 /* face.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = face.h; sourceTree = "<group>"; };
 		054DC097273EE7D500330B59 /* VideoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoController.swift; sourceTree = "<group>"; };
 		054DC099273EE7D500330B59 /* FingerprintPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FingerprintPreview.swift; sourceTree = "<group>"; };
 		054DC09A273EE7D500330B59 /* FingerprintScannerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FingerprintScannerController.swift; sourceTree = "<group>"; };
@@ -86,8 +90,8 @@
 		054DC0A3273EE7D500330B59 /* IDScannerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IDScannerController.swift; sourceTree = "<group>"; };
 		054DC0A4273EE7D500330B59 /* UploadIDController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadIDController.swift; sourceTree = "<group>"; };
 		054DC0B2273EE85E00330B59 /* openmp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openmp.framework; sourceTree = "<group>"; };
-		054DC0B5273EE86E00330B59 /* ncnn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ncnn.framework; sourceTree = "<group>"; };
-		054DC0B7273EE87800330B59 /* openmp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openmp.framework; sourceTree = "<group>"; };
+		05620FD527D4817C00D1CE15 /* quality.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = quality.mm; sourceTree = "<group>"; };
+		05620FD627D4817C00D1CE15 /* quality.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = quality.h; sourceTree = "<group>"; };
 		490522762686478200617471 /* NebuIA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NebuIA.swift; sourceTree = "<group>"; };
 		490706C82688CA0200F1CF28 /* nebuia_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nebuia_black.png; sourceTree = "<group>"; };
 		49608B072684E558004F9365 /* nebuia_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nebuia_white.png; sourceTree = "<group>"; };
@@ -104,10 +108,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				054DC0B6273EE86E00330B59 /* ncnn.framework in Frameworks */,
 				4979744326B6101700AE808B /* libc++.tbd in Frameworks */,
 				4C09BEA51078F901EF932AA7 /* Pods_NebuIA.framework in Frameworks */,
-				054DC0BA273EE8C200330B59 /* openmp.framework in Frameworks */,
+				0513245727D48D9200068045 /* ncnn.framework in Frameworks */,
+				0513245A27D48D9600068045 /* openmp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,15 +156,17 @@
 		054DC080273EE7CD00330B59 /* ncnn */ = {
 			isa = PBXGroup;
 			children = (
-				054DC081273EE7CD00330B59 /* Inference.h */,
-				054DC083273EE7CD00330B59 /* Inference.mm */,
-				054DC084273EE7CD00330B59 /* Detection.m */,
-				054DC085273EE7CD00330B59 /* DetectorWrapper.mm */,
-				054DC086273EE7CD00330B59 /* DetectorWrapper.h */,
-				054DC087273EE7CD00330B59 /* Face.mm */,
-				054DC088273EE7CD00330B59 /* Id.h */,
-				054DC089273EE7CD00330B59 /* Detection.h */,
-				054DC08A273EE7CD00330B59 /* Face.h */,
+				054DC081273EE7CD00330B59 /* inference.h */,
+				054DC083273EE7CD00330B59 /* inference.mm */,
+				054DC084273EE7CD00330B59 /* detection.m */,
+				054DC085273EE7CD00330B59 /* detector_wrapper.mm */,
+				054DC086273EE7CD00330B59 /* detector_wrapper.h */,
+				054DC087273EE7CD00330B59 /* face.mm */,
+				054DC088273EE7CD00330B59 /* id.h */,
+				054DC089273EE7CD00330B59 /* detection.h */,
+				054DC08A273EE7CD00330B59 /* face.h */,
+				05620FD527D4817C00D1CE15 /* quality.mm */,
+				05620FD627D4817C00D1CE15 /* quality.h */,
 			);
 			path = ncnn;
 			sourceTree = "<group>";
@@ -244,8 +250,8 @@
 		49F0CBA0267FAE5900460B99 = {
 			isa = PBXGroup;
 			children = (
-				054DC0B5273EE86E00330B59 /* ncnn.framework */,
-				054DC0B7273EE87800330B59 /* openmp.framework */,
+				0513245427D48D0200068045 /* ncnn.framework */,
+				0513245327D48D0200068045 /* openmp.framework */,
 				49608B062684E558004F9365 /* Assets */,
 				49F0CBAC267FAE5900460B99 /* NebuIA */,
 				49F0CBAB267FAE5900460B99 /* Products */,
@@ -293,11 +299,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				054DC090273EE7CD00330B59 /* DetectorWrapper.h in Headers */,
-				054DC08B273EE7CD00330B59 /* Inference.h in Headers */,
-				054DC093273EE7CD00330B59 /* Detection.h in Headers */,
-				054DC094273EE7CD00330B59 /* Face.h in Headers */,
-				054DC092273EE7CD00330B59 /* Id.h in Headers */,
+				054DC090273EE7CD00330B59 /* detector_wrapper.h in Headers */,
+				054DC08B273EE7CD00330B59 /* inference.h in Headers */,
+				054DC093273EE7CD00330B59 /* detection.h in Headers */,
+				054DC094273EE7CD00330B59 /* face.h in Headers */,
+				05620FD827D4817C00D1CE15 /* quality.h in Headers */,
+				054DC092273EE7CD00330B59 /* id.h in Headers */,
 				49F0CBAF267FAE5900460B99 /* NebuIA.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,23 +409,24 @@
 				054DC0A6273EE7D500330B59 /* FingerprintPreview.swift in Sources */,
 				054DC072273EE7BC00330B59 /* Image.swift in Sources */,
 				054DC07F273EE7C300330B59 /* Side.swift in Sources */,
-				054DC08D273EE7CD00330B59 /* Inference.mm in Sources */,
+				054DC08D273EE7CD00330B59 /* inference.mm in Sources */,
 				054DC076273EE7BC00330B59 /* Color.swift in Sources */,
 				054DC0A5273EE7D500330B59 /* VideoController.swift in Sources */,
 				054DC0AB273EE7D500330B59 /* AddressPreviewController.swift in Sources */,
 				054DC075273EE7BC00330B59 /* Font.swift in Sources */,
-				054DC08E273EE7CD00330B59 /* Detection.m in Sources */,
+				054DC08E273EE7CD00330B59 /* detection.m in Sources */,
 				054DC0A7273EE7D500330B59 /* FingerprintScannerController.swift in Sources */,
 				490522772686478200617471 /* NebuIA.swift in Sources */,
 				054DC074273EE7BC00330B59 /* Device.swift in Sources */,
 				054DC07C273EE7C300330B59 /* Address.swift in Sources */,
 				054DC0AC273EE7D500330B59 /* DocumentIDPreview.swift in Sources */,
 				054DC067273EE7B500330B59 /* DataExtension.swift in Sources */,
-				054DC091273EE7CD00330B59 /* Face.mm in Sources */,
+				054DC091273EE7CD00330B59 /* face.mm in Sources */,
+				05620FD727D4817C00D1CE15 /* quality.mm in Sources */,
 				054DC0AE273EE7D500330B59 /* UploadIDController.swift in Sources */,
 				054DC070273EE7BC00330B59 /* View.swift in Sources */,
 				054DC07D273EE7C300330B59 /* Document.swift in Sources */,
-				054DC08F273EE7CD00330B59 /* DetectorWrapper.mm in Sources */,
+				054DC08F273EE7CD00330B59 /* detector_wrapper.mm in Sources */,
 				054DC0A9273EE7D500330B59 /* FaceController.swift in Sources */,
 				054DC0AA273EE7D500330B59 /* AddressScannerController.swift in Sources */,
 				054DC071273EE7BC00330B59 /* Recorder.swift in Sources */,
