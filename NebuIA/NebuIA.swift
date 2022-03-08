@@ -5,6 +5,7 @@
 //  Created by Miguel on 25/06/21.
 //
 
+@available(iOS 13.0, *)
 public class NebuIA {
     
     private var client: Client!
@@ -159,11 +160,12 @@ public class NebuIA {
         }
     }
     
-    public func fingerprintScanner(hand: Int, completion: ((Finger, Finger, Finger, Finger) -> Void)? = nil) {
+    public func fingerprintScanner(hand: Int, completion: ((Finger, Finger, Finger, Finger) -> Void)? = nil, skip: (() -> Void)? = nil) {
         let fingerprintController = FingerprintScannerController()
         fingerprintController.detector = detector
         fingerprintController.client = client
         fingerprintController.onCompleteFingerprint = completion
+        fingerprintController.onSkip = skip
         fingerprintController.position = hand
         ctr.present(fingerprintController, animated: true, completion: nil)
     }

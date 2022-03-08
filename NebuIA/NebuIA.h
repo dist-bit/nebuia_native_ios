@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DetectorWrapper.h"
+#import "detector_wrapper.h"
 
 //! Project version number for NebuIA.
 FOUNDATION_EXPORT double NebuIAVersionNumber;
