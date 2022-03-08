@@ -22,7 +22,6 @@
 #define NCNN_SIMPLESTL 0
 #define NCNN_THREADS 1
 #define NCNN_BENCHMARK 0
-#define NCNN_C_API 1
 #define NCNN_PLATFORM_API 1
 #define NCNN_PIXEL 1
 #define NCNN_PIXEL_ROTATE 1
@@ -30,13 +29,8 @@
 #define NCNN_PIXEL_DRAWING 1
 #define NCNN_VULKAN 0
 #define NCNN_RUNTIME_CPU 1
-#define NCNN_AVX 0
-#define NCNN_XOP 0
-#define NCNN_FMA 0
 #define NCNN_AVX2 0
-#define NCNN_AVXVNNI 0
-#define NCNN_AVX512 0
-#define NCNN_AVX512VNNI 0
+#define NCNN_AVX 0
 #define NCNN_ARM82 1
 #define NCNN_ARM82DOT 1
 #define NCNN_MSA 0
@@ -46,7 +40,7 @@
 #define NCNN_BF16 1
 #define NCNN_FORCE_INLINE 1
 
-#define NCNN_VERSION_STRING "1.0.22.02.16"
+#define NCNN_VERSION_STRING "1.0.21.11.09"
 
 #include "ncnn_export.h"
 

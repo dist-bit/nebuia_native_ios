@@ -6,8 +6,7 @@
 //
 
 #include "inference.h"
-#include <ncnn/ncnn/layer.h>
-#include "ncnn/ncnn/cpu.h"
+#include "ncnn/ncnn/layer.h"
 
 struct GridAndStride
 {

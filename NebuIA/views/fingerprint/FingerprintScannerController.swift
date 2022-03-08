@@ -26,11 +26,14 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     
     private var content_view_preview: UIView!
     private var content_view: UIView!
+    private var instructions_container: UIView!
     
     private var back_button: UIButton!
     private var title_label: UILabel!
     private var summary_label: UILabel!
     private var action_label: UILabel!
+    
+    private var scores_label: UILabel!
     
     private var loading_indicator: UIActivityIndicatorView!
     
@@ -42,13 +45,25 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     //
     private var progress_bar: NicoProgressBar!
     private var progress_bar_container: UIView!
+    private var counter = 0
+    private var timer = Timer()
+    private var timeLimit = false
+    private var continue_id: UIButton!
     
     private var detections_count: [Int] = []
     
     var onCompleteFingerprint : ((Finger, Finger, Finger, Finger) -> Void)?
+    var onSkip : (() -> Void)?
     
     @IBAction func goBack(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func skipStep(_ sender: UIButton) {
+        self.onSkip!()
+        DispatchQueue.main.async {
+            self.back()
+        }
     }
     
     private func buildBackbutton() {
@@ -84,7 +99,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         action_label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 21))
         action_label.textAlignment = .center
         action_label.numberOfLines = 1
-        action_label.textColor = UIColor.white
+        action_label.textColor = UIColor(rgb: 0xff2886de)
         action_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 11), weight: .regular)
         action_label.minimumScaleFactor = 10/UIFont.labelFontSize
         action_label.adjustsFontSizeToFitWidth = true
@@ -95,11 +110,22 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         summary_label = UILabel(frame: UIScreen.main.bounds)
         summary_label.textAlignment = .center
         summary_label.numberOfLines = 3
-        summary_label.minimumScaleFactor = 10/UIFont.labelFontSize
+        summary_label.minimumScaleFactor = 14/UIFont.labelFontSize
         summary_label.adjustsFontSizeToFitWidth = true
         summary_label.textColor = UIColor.white
-        summary_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 12), weight: .regular)
+        summary_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 14), weight: .regular)
         summary_label.text = "Coloca tu mano sobre la cámara enfocando tus 4 dedos de tu mano hasta resaltar tus huellas dactilares lo más cerca posible"
+    }
+    
+    private func buildScoresLabel() {
+        scores_label = UILabel(frame: UIScreen.main.bounds)
+        scores_label.textAlignment = .center
+        scores_label.numberOfLines = 3
+        scores_label.minimumScaleFactor = 10/UIFont.labelFontSize
+        scores_label.adjustsFontSizeToFitWidth = true
+        scores_label.textColor = UIColor.white
+        scores_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 12), weight: .regular)
+        scores_label.text = ""
     }
     
     private func buildLogoBottom() {
@@ -116,7 +142,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     
     private func buildLoadingindicator() {
         loading_indicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        loading_indicator.color = .black
+        loading_indicator.color = .white
         loading_indicator.startAnimating()
     }
     
@@ -126,7 +152,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         progress_bar.transition(to: .determinate(percentage: 0.0))
         
         progress_bar.primaryColor = .green
-        progress_bar.secondaryColor = .gray
+        progress_bar.secondaryColor = .gray.withAlphaComponent(0.3)
         progress_bar_container.addSubview(progress_bar)
         
         NSLayoutConstraint(item: progress_bar!, attribute: .top, relatedBy: .equal, toItem: progress_bar_container, attribute: .top, multiplier: 1.0, constant: 0).isActive = true
@@ -134,6 +160,33 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         NSLayoutConstraint(item: progress_bar!, attribute: .leading, relatedBy: .equal, toItem: progress_bar_container, attribute: .leading, multiplier: 1.0, constant: 0).isActive = true
         NSLayoutConstraint(item: progress_bar!, attribute: .trailing, relatedBy: .equal, toItem: progress_bar_container, attribute: .trailing, multiplier: 1.0, constant: 0).isActive = true
         
+    }
+    
+    private func buildContinueButton() {
+        continue_id = UIButton(type: .system)
+        
+        continue_id.frame = CGRect(x: 0, y: 0, width: 135, height: 45)
+        continue_id.tintColor = UIColor.blue
+        continue_id.setTitle("Saltar paso", for: .normal)
+        continue_id.layer.cornerRadius =  6
+        continue_id.clipsToBounds = true
+        continue_id.contentMode = UIView.ContentMode.scaleToFill
+        
+        continue_id.backgroundColor = .systemBlue
+        continue_id.tintColor = .white
+        continue_id.isHidden = true
+        continue_id.translatesAutoresizingMaskIntoConstraints = false
+        continue_id.addTarget(self, action: #selector(skipStep(_:)), for: .touchUpInside)
+    }
+    
+    private func buildInstructionsContainer() {
+        instructions_container = UIButton(type: .system)
+    
+        instructions_container.layer.cornerRadius =  10
+        instructions_container.clipsToBounds = true
+        instructions_container.contentMode = UIView.ContentMode.scaleToFill
+        
+        instructions_container.backgroundColor = .black
     }
     
     private func hideLoadingShowSuccess() {
@@ -166,9 +219,9 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
             success_icon.top == action_label.bottom + 15
             
             nebuia_logo.centerX == content_view.centerX
-            nebuia_logo.width == content_view.superview!.width / 3.6
+            nebuia_logo.width == content_view.superview!.width / 3.5
             nebuia_logo.height == 20
-            nebuia_logo.centerY == content_view.superview!.bottom - botom - 50
+            nebuia_logo.centerY == content_view.superview!.bottom - botom - 80
             
             title_label.centerX == content_view.centerX
             title_label.top == content_view.superview!.top + 40
@@ -190,14 +243,34 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
             
             distribute(by: 20, vertically: action_label, loading_indicator, nebuia_logo)
         }
+        
+        constrain(content_view, summary_label, scores_label, continue_id, instructions_container)
+        { content_view, summary_label, scores_label, continue_id, instructions_container in
+
+            instructions_container.top == content_view.bottom - 370
+            instructions_container.height == 270
+            instructions_container.width == content_view.superview!.width / 1.05
+            instructions_container.centerX == content_view.centerX
+            
+            scores_label.top == instructions_container.top + 10
+            scores_label.width == summary_label.width
+            scores_label.centerX == summary_label.centerX
+            
+            continue_id.top == summary_label.bottom + 10
+            continue_id.width == summary_label.width
+            continue_id.centerX == summary_label.centerX
+            continue_id.height == 50
+        }
     }
     
     override public func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
             self.detecting = false
+            self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
+        
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -218,29 +291,40 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         buildTitleLabel()
         content_view.addSubview(title_label)
         
+        
+        buildInstructionsContainer()
+        content_view.addSubview(instructions_container)
+        
         // set up action label
         buildActionLabel()
-        content_view.addSubview(action_label)
+        instructions_container.addSubview(action_label)
         
         // set up summary
         buildSummaryLabel()
-        content_view.addSubview(summary_label)
+        instructions_container.addSubview(summary_label)
+        
+        // set up summary
+        buildScoresLabel()
+        instructions_container.addSubview(scores_label)
         
         // set up logo
         buildLogoBottom()
-        content_view.addSubview(nebuia_logo)
+        instructions_container.addSubview(nebuia_logo)
         
         // set loading indicator
         buildLoadingindicator()
-        content_view.addSubview(loading_indicator)
+        instructions_container.addSubview(loading_indicator)
         
         // set up success icon
         buildSuccessIcon()
-        content_view.addSubview(success_icon)
+        instructions_container.addSubview(success_icon)
         
         // set up progress bar
         buildProgressBar()
-        content_view.addSubview(progress_bar_container)
+        instructions_container.addSubview(progress_bar_container)
+        
+        buildContinueButton()
+        instructions_container.addSubview(continue_id)
         
         // init overlay camera
         initializeOverlay()
@@ -361,84 +445,111 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     public func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         if(!self.detecting) {
             self.detecting = true
+        
             
             let image = sampleBuffer.toUIImage()
-            let detections = detector.detectFingerprints(image)
+            let detections = detector.detectFingerprints(image) as [Detection]
             
-            
+            var scores = [Float]()
             var rects = [CGRect]()
             
-            if(detections.count >= 4) {
-                
-                rects.append(detections[0].rect())
-                rects.append(detections[1].rect())
-                rects.append(detections[2].rect())
-                rects.append(detections[3].rect())
-                
-                
-                if(rects.count == 4) {
-                    detections_count.append(rects.count)
-                } else {
-                    rects.removeAll()
-                    detections_count.removeAll()
+            if(detections.count == 4) {
+                for i in 0 ..< detections.count {
+                    let detection = detections[i]
+                    rects.append(detection.rect())
+                    let crop = image.crop(rect: detection.rect())
+                    let rotate = crop.rotate(radians: position == 0 ? -1.5708 : 1.5708)
+                    let score = detector.qualityFingerprint(rotate!)
+                    scores.append(score)
+                    
                 }
                 
-                if(detections_count.count >= 55) {
-                    Vibration.success.vibrate()
-                    detections_count.removeAll()
-                    rects.removeAll()
-                    
-                    // show loading modal
-                    DispatchQueue.main.async {
-                        self.showSpinner(onView: self.view)
-                    }
-                    
-                    // get image
-                    client.fingerprints(image: image, position: position, completion: { data, error in
-                        if error == nil {
-                            let dict = data as! Dictionary<String, Any>
-                            
-                            if dict["status"] as! Bool {
-                                let payload = dict["payload"] as! Dictionary<String, Any>
-                                let result =  payload["fingers"] as! Array<Dictionary<String, Any>>
-                                var fingers = [Finger]()
-                                for item in result {
-                                    fingers.append(
-                                        Finger(
-                                            image: self.getImageFromBase64(b64: item["image"] as! String),
-                                            name: item["name"]! as! String,
-                                            score: item["nfiq"]! as! Int
-                                        )
+            }
+            
+            let size = scores.count
+            
+            if size == 4 {
+                let percent = (scores[3]) * 100 / 5.0
+                setPercent(value: percent)
+                setScores(scores: scores)
+            }
+            
+            if size == 4 && scores[3] >= 5.0 && scores[2] >= 3.0 {
+                
+            
+                Vibration.success.vibrate()
+                rects.removeAll()
+                
+                // show loading modal
+                DispatchQueue.main.async {
+                    self.showSpinner(onView: self.view)
+                }
+                
+                // get image
+                client.fingerprints(image: image, position: position, completion: { data, error in
+                    self.setPercent(value: 0.0)
+                    if error == nil {
+                        let dict = data as! Dictionary<String, Any>
+                        
+                        if dict["status"] as! Bool {
+                            let payload = dict["payload"] as! Dictionary<String, Any>
+                            let result =  payload["fingers"] as! Array<Dictionary<String, Any>>
+                            var fingers = [Finger]()
+                            for item in result {
+                                fingers.append(
+                                    Finger(
+                                        image: self.getImageFromBase64(b64: item["image"] as! String),
+                                        name: item["name"]! as! String,
+                                        score: item["nfiq"]! as! Int
                                     )
-                                }
-                                
-                                DispatchQueue.main.async {
-                                    self.removeSpinner()
-                                    self.previewResult(fingers: fingers)
-                                }
-                            } else {
-                                DispatchQueue.main.async {
-                                    self.removeSpinner()
-                                    self.detecting = false
-                                }
+                                )
+                            }
+                            
+                            DispatchQueue.main.async {
+                                self.timer.invalidate()
+                                self.removeSpinner()
+                                self.previewResult(fingers: fingers)
                             }
                         } else {
                             DispatchQueue.main.async {
+                            
                                 self.removeSpinner()
                                 self.detecting = false
                             }
                         }
-                    })
-                } else {
-                    self.detecting = false
-                }
+                    } else {
+                        DispatchQueue.main.async {
+                            self.removeSpinner()
+                            self.detecting = false
+                        }
+                    }
+                })
+                
             } else {
                 self.detecting = false
+                setPercent(value: 0.0)
             }
-            
-            DispatchQueue.main.async {
-                //  self.detections_view.image = self.drawOccurrencesOnImage(rects, UIImage.emptyImage(with: image.size)!)
+        }
+    }
+    
+    public func setScores(scores: [Float]) {
+        DispatchQueue.main.async {
+            self.scores_label.text = "\(scores[0]) \(scores[1]) \(scores[2]) \(scores[3])"
+        }
+    }
+    
+    private func setPercent(value: Float) {
+        DispatchQueue.main.async {
+            if(value < 20) {
+                self.progress_bar.primaryColor = .red
+            } else if(value > 20 && value < 40) {
+                self.progress_bar.primaryColor = .orange
+            } else if(value > 40 && value < 70) {
+                self.progress_bar.primaryColor = .yellow
+            } else if(value > 70) {
+                self.progress_bar.primaryColor = .green
             }
+            self.progress_bar.transition(to: .determinate(percentage: CGFloat(value)))
         }
     }
     
@@ -505,6 +616,32 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         let image = UIImage(data: imageData!)
         return image!
     }
+    
+    @objc func timerAction() {
+           counter += 1
+        if counter == 25 {
+            DispatchQueue.main.async {
+               // hide items
+                Vibration.warning.vibrate()
+                self.summary_label.text = "No hemos podido detectar tus huellas, asegurate de contar con las condiciones adecuadas."
+            }
+        }
+        
+        if counter == 50 {
+            timeLimit = true
+            self.timer.invalidate()
+            DispatchQueue.main.async {
+               // hide items
+                self.progress_bar_container.isHidden = true
+                self.scores_label.isHidden = true
+                self.action_label.isHidden = true
+                self.loading_indicator.isHidden = true
+                self.continue_id.isHidden = false
+                Vibration.error.vibrate()
+                self.summary_label.text = "Parece que no puedes capturar tus huellas, puedes saltar este paso"
+            }
+        }
+       }
     
 }
 

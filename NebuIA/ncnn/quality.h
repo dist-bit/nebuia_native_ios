@@ -10,7 +10,6 @@
 #if defined __cplusplus
 
 #include <ncnn/ncnn/net.h>
-#include <ncnn/ncnn/layer.h>
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <UIKit/UIImage.h>
