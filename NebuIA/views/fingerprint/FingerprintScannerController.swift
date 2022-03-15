@@ -33,8 +33,6 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     private var summary_label: UILabel!
     private var action_label: UILabel!
     
-    private var scores_label: UILabel!
-    
     private var loading_indicator: UIActivityIndicatorView!
     
     private var nebuia_logo: UIImageView!
@@ -115,17 +113,6 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         summary_label.textColor = UIColor.white
         summary_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 14), weight: .regular)
         summary_label.text = "Coloca tu mano sobre la cámara enfocando tus 4 dedos de tu mano hasta resaltar tus huellas dactilares lo más cerca posible"
-    }
-    
-    private func buildScoresLabel() {
-        scores_label = UILabel(frame: UIScreen.main.bounds)
-        scores_label.textAlignment = .center
-        scores_label.numberOfLines = 3
-        scores_label.minimumScaleFactor = 10/UIFont.labelFontSize
-        scores_label.adjustsFontSizeToFitWidth = true
-        scores_label.textColor = UIColor.white
-        scores_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 12), weight: .regular)
-        scores_label.text = ""
     }
     
     private func buildLogoBottom() {
@@ -232,29 +219,25 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
             content_view_preview.height == content_view.superview!.height
             
             
-            summary_label.top == action_label.top - 75
+            summary_label.top == action_label.top - 95
             summary_label.width == content_view.superview!.width / 1.2
             summary_label.centerX == content_view.centerX
             
             progress_bar_container.width == content_view.superview!.width / 1.2
             progress_bar_container.height ==  5
-            progress_bar_container.top == action_label.top - 100
+            progress_bar_container.top == action_label.top - 120
             progress_bar_container.centerX == content_view.centerX
             
-            distribute(by: 20, vertically: action_label, loading_indicator, nebuia_logo)
+            distribute(by: 14, vertically: action_label, loading_indicator, nebuia_logo)
         }
         
-        constrain(content_view, summary_label, scores_label, continue_id, instructions_container)
-        { content_view, summary_label, scores_label, continue_id, instructions_container in
+        constrain(content_view, summary_label, continue_id, instructions_container)
+        { content_view, summary_label, continue_id, instructions_container in
 
-            instructions_container.top == content_view.bottom - 370
-            instructions_container.height == 270
+            instructions_container.top == content_view.bottom - 340
+            instructions_container.height == 250
             instructions_container.width == content_view.superview!.width / 1.05
             instructions_container.centerX == content_view.centerX
-            
-            scores_label.top == instructions_container.top + 10
-            scores_label.width == summary_label.width
-            scores_label.centerX == summary_label.centerX
             
             continue_id.top == summary_label.bottom + 10
             continue_id.width == summary_label.width
@@ -267,7 +250,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) { [self] in
             self.detecting = false
             self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
         
@@ -302,10 +285,6 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         // set up summary
         buildSummaryLabel()
         instructions_container.addSubview(summary_label)
-        
-        // set up summary
-        buildScoresLabel()
-        instructions_container.addSubview(scores_label)
         
         // set up logo
         buildLogoBottom()
@@ -460,22 +439,22 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                     let crop = image.crop(rect: detection.rect())
                     let rotate = crop.rotate(radians: position == 0 ? -1.5708 : 1.5708)
                     let score = detector.qualityFingerprint(rotate!)
-                    scores.append(score)
+                    
+                    if score > 2 {
+                        scores.append(score)
+                    }
                     
                 }
-                
+            } else {
+                rects.removeAll()
             }
             
             let size = scores.count
             
-            if size == 4 {
-                let percent = (scores[3]) * 100 / 5.0
-                setPercent(value: percent)
-                setScores(scores: scores)
-            }
+            let percent = size * 100 / 4
+            setPercent(value: percent)
             
-            if size == 4 && scores[3] >= 5.0 && scores[2] >= 3.0 {
-                
+            if size == 4 {
             
                 Vibration.success.vibrate()
                 rects.removeAll()
@@ -487,7 +466,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                 
                 // get image
                 client.fingerprints(image: image, position: position, completion: { data, error in
-                    self.setPercent(value: 0.0)
+                    self.setPercent(value: 0)
                     if error == nil {
                         let dict = data as! Dictionary<String, Any>
                         
@@ -527,26 +506,20 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                 
             } else {
                 self.detecting = false
-                setPercent(value: 0.0)
+                setPercent(value: 0)
             }
         }
     }
     
-    public func setScores(scores: [Float]) {
+    private func setPercent(value: Int) {
         DispatchQueue.main.async {
-            self.scores_label.text = "\(scores[0]) \(scores[1]) \(scores[2]) \(scores[3])"
-        }
-    }
-    
-    private func setPercent(value: Float) {
-        DispatchQueue.main.async {
-            if(value < 20) {
+            if(value < 30) {
                 self.progress_bar.primaryColor = .red
-            } else if(value > 20 && value < 40) {
+            } else if(value > 30 && value < 60) {
                 self.progress_bar.primaryColor = .orange
-            } else if(value > 40 && value < 70) {
+            } else if(value > 60 && value < 95) {
                 self.progress_bar.primaryColor = .yellow
-            } else if(value > 70) {
+            } else if(value >= 100) {
                 self.progress_bar.primaryColor = .green
             }
             self.progress_bar.transition(to: .determinate(percentage: CGFloat(value)))
@@ -633,7 +606,6 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
             DispatchQueue.main.async {
                // hide items
                 self.progress_bar_container.isHidden = true
-                self.scores_label.isHidden = true
                 self.action_label.isHidden = true
                 self.loading_indicator.isHidden = true
                 self.continue_id.isHidden = false
