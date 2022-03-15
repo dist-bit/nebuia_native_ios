@@ -50,9 +50,9 @@ Quality::quality(UIImage *image) const {
     CGContextRelease(contextRef);
     
     
-    ncnn::Mat in = ncnn::Mat::from_pixels_resize(rgba, ncnn::Mat::PIXEL_RGBA2RGB, width, height, 416, 416);
-    const float mean_values[3] = {0.485f*255.f, 0.456f*255.f, 0.406f*255.f};
-    const float norm_values[3] = {1/0.229f/255.f, 1/0.224f/255.f, 1/0.225f/255.f};
+    ncnn::Mat in = ncnn::Mat::from_pixels_resize(rgba, ncnn::Mat::PIXEL_RGBA2RGB, width, height, 320, 320);
+    const float mean_values[3] = {127.5f, 127.5f, 127.5f};
+    const float norm_values[3] = {1.0 / 127.5, 1.0 / 127.5, 1.0 / 127.5};
     in.substract_mean_normalize(mean_values, norm_values);
     ncnn::Extractor ex = Net->create_extractor();
     ex.input("mobilenetv2_1.00_224_input_blob", in);
