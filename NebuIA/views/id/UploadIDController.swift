@@ -216,14 +216,6 @@ public class UploadIDController: UIViewController {
         constraintsInit()
     }
     
-    private func decodePayload(data: Any) -> Bool {
-        if let result = data as? Dictionary<String, AnyObject> {
-            let status = result["status"] as? Optional<Int>
-            return status == 1
-        }
-        return false
-    }
-    
     private func hideLoadingShowSuccess() {
         UIView.transition(with: self.loading_indicator, duration: 0.4, options: .transitionCrossDissolve, animations: {() -> Void in
             self.loading_indicator.isHidden = true
@@ -259,16 +251,39 @@ public class UploadIDController: UIViewController {
         super.viewDidAppear(animated)
         if(document.back_crop_image != nil) {
             client.uploadID(front: document.front_image!, back: document.back_image!) { data, error in
-                self.document.reset()
-                self.decodeResult(status: self.decodePayload(data: data!))
+                if error != nil {
+                    self.decodeResult(status: false)
+                } else {
+                    self.document.reset()
+                    self.decodeResult(status: self.decodePayload(data: data!))
+                }
+            
             }
         } else {
             client.uploadID(front: document.front_image!) { data, error in
-                self.document.reset()
-                self.decodeResult(status: self.decodePayload(data: data!))
+                if error != nil {
+                    self.document.reset()
+                    self.decodeResult(status: false)
+                } else {
+                    self.document.reset()
+                    if(data != nil) {
+                        self.decodeResult(status: self.decodePayload(data: data))
+                    } else {
+                        self.decodeResult(status: self.decodePayload(data: false))
+                    }
+                }
             }
         }
     }
+    
+    private func decodePayload(data: Any) -> Bool {
+        if let result = data as? Dictionary<String, AnyObject> {
+            let status = result["status"] as? Optional<Int>
+            return status == 1
+        }
+        return false
+    }
+    
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
