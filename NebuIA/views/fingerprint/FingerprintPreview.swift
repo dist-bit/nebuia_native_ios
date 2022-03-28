@@ -58,7 +58,7 @@ public class FingerprintPreviewController: UIViewController {
         
         continue_id.frame = CGRect(x: 0, y: 0, width: 135, height: 45)
         continue_id.tintColor = UIColor.blue
-        continue_id.setTitle("Si, continuar", for: .normal)
+        continue_id.setTitle("Continuar", for: .normal)
         continue_id.layer.cornerRadius =  6
         continue_id.clipsToBounds = true
         continue_id.contentMode = UIView.ContentMode.scaleToFill
@@ -67,6 +67,8 @@ public class FingerprintPreviewController: UIViewController {
         continue_id.tintColor = .white
         continue_id.translatesAutoresizingMaskIntoConstraints = false
         continue_id.addTarget(self, action: #selector(continueFinger(_:)), for: .touchUpInside)
+        
+        continue_id.isHidden = fingers[0].score! < 45
     }
     
     private func buildRetakeButton() {
@@ -83,6 +85,10 @@ public class FingerprintPreviewController: UIViewController {
         retake.tintColor = .systemBlue
         retake.translatesAutoresizingMaskIntoConstraints = false
         retake.addTarget(self, action: #selector(goBack(_:)), for: .touchUpInside)
+        
+        
+        retake.isHidden = fingers[0].score! > 45
+        
     }
     
     private func buildTitleLabel() {
@@ -104,7 +110,7 @@ public class FingerprintPreviewController: UIViewController {
         summary_label.adjustsFontSizeToFitWidth = true
         summary_label.textColor =  UIColor(rgb: 0x7d82a8)
         summary_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 10), weight: .regular)
-        summary_label.text = "Por favor verifica que tus huellas dactilares se distingan claramente"
+        summary_label.text = fingers[0].score! > 45 ? "Tus huellas dactilares fueron capuradas correctamente, puedes continuar con el proceso" : "Tus huellas no alcanzan una calificación satisfactoria, deberás realizar el proceso nuevamente"
     }
     
     private func buildLogoBottom() {
@@ -191,11 +197,16 @@ public class FingerprintPreviewController: UIViewController {
         status_button.clipsToBounds = true
         status_button.contentMode = UIView.ContentMode.scaleToFill
         
-        status_button.backgroundColor = UIColor(rgb: 0xa6cc3b)
+        status_button.backgroundColor = fingers[0].score! > 45 ? UIColor(rgb: 0xa6cc3b) : UIColor(rgb: 0xFF6666)
         status_button.translatesAutoresizingMaskIntoConstraints = false
         
         if #available(iOS 13.0, *) {
-            let btnImage = UIImage(systemName: "checkmark")
+            let btnImage: UIImage
+            if fingers[0].score! > 45 {
+                btnImage = UIImage(systemName: "checkmark")!
+            } else {
+                btnImage = UIImage(systemName: "xmark")!
+            }
             status_button.setImage(btnImage , for: .normal)
             status_button.tintColor = .white
         }

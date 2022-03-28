@@ -50,7 +50,8 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     
     private var detections_count: [Int] = []
     
-    var onCompleteFingerprint : ((Finger, Finger, Finger, Finger) -> Void)?
+    var fingerRetry: Int = 1
+    var onCompleteFingerprint : ((Finger, Finger, Finger, Finger, Int) -> Void)?
     var onSkip : (() -> Void)?
     
     @IBAction func goBack(_ sender: UIButton) {
@@ -173,7 +174,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         instructions_container.clipsToBounds = true
         instructions_container.contentMode = UIView.ContentMode.scaleToFill
         
-        instructions_container.backgroundColor = .black
+        instructions_container.backgroundColor = .black.withAlphaComponent(0.8)
     }
     
     private func hideLoadingShowSuccess() {
@@ -249,6 +250,8 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     override public func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
+        fingerRetry = 1;
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) { [self] in
             self.detecting = false
@@ -409,7 +412,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     
     private func onCompleteUpload(index: Finger, middle: Finger, ring: Finger, little: Finger) {
         self.complete = true
-        self.onCompleteFingerprint!(index, middle, ring, little)
+        self.onCompleteFingerprint!(index, middle, ring, little, fingerRetry)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.back()
         }
@@ -474,6 +477,10 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                             let payload = dict["payload"] as! Dictionary<String, Any>
                             let result =  payload["fingers"] as! Array<Dictionary<String, Any>>
                             var fingers = [Finger]()
+                            
+                            // increment retry
+                            self.fingerRetry+=1
+                            
                             for item in result {
                                 fingers.append(
                                     Finger(
