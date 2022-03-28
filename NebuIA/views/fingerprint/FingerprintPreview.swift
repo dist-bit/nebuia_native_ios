@@ -42,6 +42,7 @@ public class FingerprintPreviewController: UIViewController {
     
     var onDismmisBlock : (() -> Void)?
     var onCompleteBlock : ((Finger, Finger, Finger, Finger) -> Void)?
+    var onSkipBlock : ((Finger, Finger, Finger, Finger) -> Void)?
     var errorAlert: Bool = false;
     
     @IBAction func goBack(_ sender: UIButton) {
@@ -50,6 +51,11 @@ public class FingerprintPreviewController: UIViewController {
     
     @IBAction func continueFinger(_ sender: UIButton) {
         self.onCompleteBlock!(fingers[0], fingers[1], fingers[2], fingers[3])
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func skipFinger(_ sender: UIButton) {
+        self.onSkipBlock!(fingers[0], fingers[1], fingers[2], fingers[3])
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -66,7 +72,12 @@ public class FingerprintPreviewController: UIViewController {
         continue_id.backgroundColor = .systemBlue
         continue_id.tintColor = .white
         continue_id.translatesAutoresizingMaskIntoConstraints = false
-        continue_id.addTarget(self, action: #selector(continueFinger(_:)), for: .touchUpInside)
+        
+        if fingers[0].score! > 45 {
+            continue_id.addTarget(self, action: #selector(continueFinger(_:)), for: .touchUpInside)
+        } else {
+            continue_id.addTarget(self, action: #selector(skipFinger(_:)), for: .touchUpInside)
+        }
         
         continue_id.isHidden = fingers[0].score! < 45
     }

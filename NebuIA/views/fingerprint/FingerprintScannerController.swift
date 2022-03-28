@@ -50,8 +50,9 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     
     private var detections_count: [Int] = []
     
-    var fingerRetry: Int = 1
-    var onCompleteFingerprint : ((Finger, Finger, Finger, Finger, Int) -> Void)?
+
+    var onCompleteFingerprint : ((Finger, Finger, Finger, Finger) -> Void)?
+    var onSkipWithFingerprint : ((Finger, Finger, Finger, Finger) -> Void)?
     var onSkip : (() -> Void)?
     
     @IBAction func goBack(_ sender: UIButton) {
@@ -251,8 +252,6 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        fingerRetry = 1;
-        
         DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) { [self] in
             self.detecting = false
             self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
@@ -412,7 +411,15 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     
     private func onCompleteUpload(index: Finger, middle: Finger, ring: Finger, little: Finger) {
         self.complete = true
-        self.onCompleteFingerprint!(index, middle, ring, little, fingerRetry)
+        self.onCompleteFingerprint!(index, middle, ring, little)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.back()
+        }
+    }
+    
+    private func onSkipWithFingers(index: Finger, middle: Finger, ring: Finger, little: Finger) {
+        self.complete = true
+        self.onSkipWithFingerprint!(index, middle, ring, little)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.back()
         }
@@ -477,9 +484,6 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                             let payload = dict["payload"] as! Dictionary<String, Any>
                             let result =  payload["fingers"] as! Array<Dictionary<String, Any>>
                             var fingers = [Finger]()
-                            
-                            // increment retry
-                            self.fingerRetry+=1
                             
                             for item in result {
                                 fingers.append(
@@ -567,6 +571,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         toggleTorch(on: false)
         let preview: FingerprintPreviewController = FingerprintPreviewController()
         preview.onCompleteBlock = self.onCompleteUpload
+        preview.onSkipBlock = self.onSkipWithFingerprint
         preview.onDismmisBlock = self.onPreviewDissmis
         preview.fingers =  fingers
         preview.client = self.client
