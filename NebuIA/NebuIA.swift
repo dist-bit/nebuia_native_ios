@@ -16,8 +16,7 @@ public class NebuIA {
     private var document: Document = Document()
     private var address: Address = Address()
     private var detector = DetectorWrapper()
-    
-    
+   
     public init(controller: UIViewController) {
         let publickey = Bundle.main.object(forInfoDictionaryKey: "NebuIAPublicKey") as! String
         let secretKey = Bundle.main.object(forInfoDictionaryKey: "NebuIASecretKey") as! String
@@ -160,7 +159,7 @@ public class NebuIA {
         }
     }
     
-    public func fingerprintScanner(hand: Int, completion: ((Finger, Finger, Finger, Finger) -> Void)? = nil, skip: (() -> Void)? = nil) {
+    public func fingerprintScanner(hand: Int, completion: ((Finger, Finger, Finger, Finger, Int) -> Void)? = nil, skip: (() -> Void)? = nil) {
         let fingerprintController = FingerprintScannerController()
         fingerprintController.detector = detector
         fingerprintController.client = client
