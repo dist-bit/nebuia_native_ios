@@ -38,7 +38,7 @@ public class FingerprintPreviewController: UIViewController {
     private var nebuia_logo: UIImageView!
     
     private var continue_id: UIButton!
-    private var retake: UIButton!
+    //private var retake: UIButton!
     
     var onDismmisBlock : (() -> Void)?
     var onCompleteBlock : ((Finger, Finger, Finger, Finger) -> Void)?
@@ -64,7 +64,6 @@ public class FingerprintPreviewController: UIViewController {
         
         continue_id.frame = CGRect(x: 0, y: 0, width: 135, height: 45)
         continue_id.tintColor = UIColor.blue
-        continue_id.setTitle("Continuar", for: .normal)
         continue_id.layer.cornerRadius =  6
         continue_id.clipsToBounds = true
         continue_id.contentMode = UIView.ContentMode.scaleToFill
@@ -74,15 +73,15 @@ public class FingerprintPreviewController: UIViewController {
         continue_id.translatesAutoresizingMaskIntoConstraints = false
         
         if fingers[0].score! > 45 {
+            continue_id.setTitle("Continuar", for: .normal)
             continue_id.addTarget(self, action: #selector(continueFinger(_:)), for: .touchUpInside)
         } else {
+            continue_id.setTitle("Capturar nuevamente", for: .normal)
             continue_id.addTarget(self, action: #selector(skipFinger(_:)), for: .touchUpInside)
         }
-        
-        continue_id.isHidden = fingers[0].score! < 45
     }
     
-    private func buildRetakeButton() {
+    /* private func buildRetakeButton() {
         retake = UIButton(type: .system)
         
         retake.frame = CGRect(x: 0, y: 0, width: 135, height: 45)
@@ -100,7 +99,7 @@ public class FingerprintPreviewController: UIViewController {
         
         retake.isHidden = fingers[0].score! > 45
         
-    }
+    } */
     
     private func buildTitleLabel() {
         title_label = UILabel(frame: UIScreen.main.bounds)
@@ -235,8 +234,8 @@ public class FingerprintPreviewController: UIViewController {
     
     func constraintsInit() {
         let botom: CGFloat = UIDevice.current.hasNotch ? 50 : 0
-        constrain(title_label, content_view, summary_label, nebuia_logo, continue_id, retake, status_button, subtitle_label)
-        { title_label, content_view, summary_label, nebuia_logo, continue_id, retake, status_button, subtitle_label in
+        constrain(title_label, content_view, summary_label, nebuia_logo, continue_id, /*retake,*/status_button, subtitle_label)
+        { title_label, content_view, summary_label, nebuia_logo, continue_id, /*retake,*/ status_button, subtitle_label in
             
             title_label.centerX == content_view.centerX
             title_label.top == content_view.superview!.top + 30
@@ -259,10 +258,10 @@ public class FingerprintPreviewController: UIViewController {
             continue_id.width == content_view.superview!.width / 1.8
             continue_id.height == 50
             
-            retake.centerX == content_view.centerX
-            retake.top == continue_id.bottom + 10
-            retake.width == continue_id.width
-            retake.height == 50
+            //retake.centerX == content_view.centerX
+            //retake.top == continue_id.bottom + 10
+            //retake.width == continue_id.width
+            //retake.height == 50
             
             nebuia_logo.centerX == content_view.centerX
             nebuia_logo.width == content_view.superview!.width / 4.6
@@ -333,8 +332,8 @@ public class FingerprintPreviewController: UIViewController {
         content_view.addSubview(continue_id)
         
         // set up retake button
-        buildRetakeButton()
-        content_view.addSubview(retake)
+        //buildRetakeButton()
+        //content_view.addSubview(retake)
         
         // set up logo
         buildLogoBottom()
