@@ -50,10 +50,10 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     
     private var detections_count: [Int] = []
     
-
     var onCompleteFingerprint : ((Finger, Finger, Finger, Finger) -> Void)?
     var onSkipWithFingerprint : ((Finger, Finger, Finger, Finger) -> Void)?
     var onSkip : (() -> Void)?
+    var currentStep: Int = 1
     
     @IBAction func goBack(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -156,7 +156,13 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         
         continue_id.frame = CGRect(x: 0, y: 0, width: 135, height: 45)
         continue_id.tintColor = UIColor.blue
-        continue_id.setTitle("Saltar paso", for: .normal)
+        
+        if currentStep == 4 {
+            continue_id.setTitle("Saltar paso", for: .normal)
+        } else {
+            continue_id.setTitle("Reintentar", for: .normal)
+        }
+        
         continue_id.layer.cornerRadius =  6
         continue_id.clipsToBounds = true
         continue_id.contentMode = UIView.ContentMode.scaleToFill
@@ -471,6 +477,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                 
                 // show loading modal
                 DispatchQueue.main.async {
+                    self.timer.invalidate()
                     self.showSpinner(onView: self.view)
                 }
                 
@@ -496,7 +503,6 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                             }
                             
                             DispatchQueue.main.async {
-                                self.timer.invalidate()
                                 self.removeSpinner()
                                 self.previewResult(fingers: fingers)
                             }
@@ -573,6 +579,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         preview.onCompleteBlock = self.onCompleteUpload
         preview.onSkipBlock = self.onSkipWithFingers
         preview.onDismmisBlock = self.onPreviewDissmis
+        preview.currentStep = self.currentStep
         preview.fingers =  fingers
         preview.client = self.client
         self.present(preview, animated: true, completion: nil)
@@ -622,7 +629,12 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                 self.loading_indicator.isHidden = true
                 self.continue_id.isHidden = false
                 Vibration.error.vibrate()
-                self.summary_label.text = "Parece que no puedes capturar tus huellas, puedes saltar este paso"
+                
+                if self.currentStep == 4 {
+                    self.summary_label.text = "Parece que no puedes capturar tus huellas, puedes saltar este paso"
+                } else {
+                    self.summary_label.text = "Parece que no puedes capturar tus huellas, puedes reintentar la captura"
+                }
             }
         }
        }
