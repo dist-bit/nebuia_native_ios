@@ -571,7 +571,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         toggleTorch(on: false)
         let preview: FingerprintPreviewController = FingerprintPreviewController()
         preview.onCompleteBlock = self.onCompleteUpload
-        preview.onSkipBlock = self.onSkipWithFingerprint
+        preview.onSkipBlock = self.onSkipWithFingers
         preview.onDismmisBlock = self.onPreviewDissmis
         preview.fingers =  fingers
         preview.client = self.client
