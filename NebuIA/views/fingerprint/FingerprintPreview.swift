@@ -43,7 +43,7 @@ public class FingerprintPreviewController: UIViewController {
     var onDismmisBlock : (() -> Void)?
     var onCompleteBlock : ((Finger, Finger, Finger, Finger) -> Void)?
     var onSkipBlock : ((Finger, Finger, Finger, Finger) -> Void)?
-    var errorAlert: Bool = false;
+    var currentStep: Int = 1
     
     @IBAction func goBack(_ sender: UIButton) {
         self.back()
@@ -76,7 +76,11 @@ public class FingerprintPreviewController: UIViewController {
             continue_id.setTitle("Continuar", for: .normal)
             continue_id.addTarget(self, action: #selector(continueFinger(_:)), for: .touchUpInside)
         } else {
-            continue_id.setTitle("Capturar nuevamente", for: .normal)
+            if currentStep == 4 {
+                continue_id.setTitle("Saltar paso", for: .normal)
+            } else {
+                continue_id.setTitle("Capturar nuevamente", for: .normal)
+            }
             continue_id.addTarget(self, action: #selector(skipFinger(_:)), for: .touchUpInside)
         }
     }
