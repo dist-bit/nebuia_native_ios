@@ -615,7 +615,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
             DispatchQueue.main.async {
                // hide items
                 Vibration.warning.vibrate()
-                self.summary_label.text = "No hemos podido detectar tus huellas, asegurate de contar con las condiciones adecuadas."
+                self.summary_label.text = "No hemos podido detectar tus huellas, asegúrate de contar con las condiciones adecuadas."
             }
         }
         
