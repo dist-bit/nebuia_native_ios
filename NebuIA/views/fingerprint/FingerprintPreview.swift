@@ -43,7 +43,7 @@ public class FingerprintPreviewController: UIViewController {
     var onDismmisBlock : (() -> Void)?
     var onCompleteBlock : ((Finger, Finger, Finger, Finger) -> Void)?
     var onSkipBlock : ((Finger, Finger, Finger, Finger) -> Void)?
-    var currentStep: Int = 1
+    var skipStep: Bool = false
     
     @IBAction func goBack(_ sender: UIButton) {
         self.back()
@@ -76,7 +76,7 @@ public class FingerprintPreviewController: UIViewController {
             continue_id.setTitle("Continuar", for: .normal)
             continue_id.addTarget(self, action: #selector(continueFinger(_:)), for: .touchUpInside)
         } else {
-            if currentStep == 4 {
+            if skipStep {
                 continue_id.setTitle("Saltar paso", for: .normal)
             } else {
                 continue_id.setTitle("Capturar nuevamente", for: .normal)
@@ -123,8 +123,18 @@ public class FingerprintPreviewController: UIViewController {
         summary_label.minimumScaleFactor = 10/UIFont.labelFontSize
         summary_label.adjustsFontSizeToFitWidth = true
         summary_label.textColor =  UIColor(rgb: 0x7d82a8)
-        summary_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 10), weight: .regular)
-        summary_label.text = fingers[0].score! > 45 ? "Tus huellas dactilares fueron capuradas correctamente, puedes continuar con el proceso" : "Tus huellas no alcanzan una calificación satisfactoria, deberás realizar el proceso nuevamente"
+        summary_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 11), weight: .regular)
+        
+        
+        if fingers[0].score! > 45 {
+            summary_label.text = "Tus huellas dactilares fueron capuradas correctamente, puedes continuar con el proceso"
+        } else {
+            if skipStep {
+                summary_label.text = "Tus huellas no alcanzan una calificación satisfactoria, puedes saltar este paso"
+            } else {
+                summary_label.text = "Tus huellas no alcanzan una calificación satisfactoria, puedes reintentar la captura"
+            }
+        }
     }
     
     private func buildLogoBottom() {

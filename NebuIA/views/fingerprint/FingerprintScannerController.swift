@@ -53,7 +53,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     var onCompleteFingerprint : ((Finger, Finger, Finger, Finger) -> Void)?
     var onSkipWithFingerprint : ((Finger, Finger, Finger, Finger) -> Void)?
     var onSkip : (() -> Void)?
-    var currentStep: Int = 1
+    var skipStep: Bool = false
     
     @IBAction func goBack(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -157,7 +157,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         continue_id.frame = CGRect(x: 0, y: 0, width: 135, height: 45)
         continue_id.tintColor = UIColor.blue
         
-        if currentStep == 4 {
+        if skipStep {
             continue_id.setTitle("Saltar paso", for: .normal)
         } else {
             continue_id.setTitle("Reintentar", for: .normal)
@@ -456,7 +456,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                     let rotate = crop.rotate(radians: position == 0 ? -1.5708 : 1.5708)
                     let score = detector.qualityFingerprint(rotate!)
                     
-                    if score > 2 {
+                    if score > 4 {
                         scores.append(score)
                     }
                     
@@ -579,7 +579,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         preview.onCompleteBlock = self.onCompleteUpload
         preview.onSkipBlock = self.onSkipWithFingers
         preview.onDismmisBlock = self.onPreviewDissmis
-        preview.currentStep = self.currentStep
+        preview.skipStep = self.skipStep
         preview.fingers =  fingers
         preview.client = self.client
         self.present(preview, animated: true, completion: nil)
@@ -630,7 +630,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                 self.continue_id.isHidden = false
                 Vibration.error.vibrate()
                 
-                if self.currentStep == 4 {
+                if self.skipStep {
                     self.summary_label.text = "Parece que no puedes capturar tus huellas, puedes saltar este paso"
                 } else {
                     self.summary_label.text = "Parece que no puedes capturar tus huellas, puedes reintentar la captura"
