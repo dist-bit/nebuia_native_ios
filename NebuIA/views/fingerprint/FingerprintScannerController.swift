@@ -456,7 +456,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                     let rotate = crop.rotate(radians: position == 0 ? -1.5708 : 1.5708)
                     let score = detector.qualityFingerprint(rotate!)
                     
-                    if score > 5 {
+                    if score > 10 {
                         scores.append(score)
                     }
                     
