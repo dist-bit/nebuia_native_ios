@@ -54,7 +54,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     var onSkipWithFingerprint : ((Finger, Finger, Finger, Finger) -> Void)?
     var onSkip : (() -> Void)?
     var skipStep: Bool = false
-    var nfiqValue = 45
+    var qualityValue: Float = 10.0
     
     @IBAction func goBack(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -457,7 +457,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                     let rotate = crop.rotate(radians: position == 0 ? -1.5708 : 1.5708)
                     let score = detector.qualityFingerprint(rotate!)
                     
-                    if score > 10 {
+                    if score > self.qualityValue {
                         scores.append(score)
                     }
                     
@@ -582,7 +582,6 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         preview.onDismmisBlock = self.onPreviewDissmis
         preview.skipStep = self.skipStep
         preview.fingers =  fingers
-        preview.nfiqValue = self.nfiqValue
         preview.client = self.client
         self.present(preview, animated: true, completion: nil)
     }

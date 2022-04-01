@@ -159,14 +159,14 @@ public class NebuIA {
         }
     }
     
-    public func fingerprintScanner(hand: Int, skipStep: Bool, nfiqValue: Int, completion: ((Finger, Finger, Finger, Finger) -> Void)? = nil, skipWithFingers: ((Finger, Finger, Finger, Finger) -> Void)? = nil, skip: (() -> Void)? = nil) {
+    public func fingerprintScanner(hand: Int, skipStep: Bool, qualityValue: Float, completion: ((Finger, Finger, Finger, Finger) -> Void)? = nil, skipWithFingers: ((Finger, Finger, Finger, Finger) -> Void)? = nil, skip: (() -> Void)? = nil) {
         let fingerprintController = FingerprintScannerController()
         fingerprintController.detector = detector
         fingerprintController.client = client
         fingerprintController.onSkipWithFingerprint = skipWithFingers
         fingerprintController.onCompleteFingerprint = completion
         fingerprintController.onSkip = skip
-        fingerprintController.nfiqValue = nfiqValue
+        fingerprintController.qualityValue = qualityValue
         fingerprintController.skipStep = skipStep
         fingerprintController.position = hand
         ctr.present(fingerprintController, animated: true, completion: nil)
