@@ -54,6 +54,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     var onSkipWithFingerprint : ((Finger, Finger, Finger, Finger) -> Void)?
     var onSkip : (() -> Void)?
     var skipStep: Bool = false
+    var nfiqValue = 45
     
     @IBAction func goBack(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -581,6 +582,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         preview.onDismmisBlock = self.onPreviewDissmis
         preview.skipStep = self.skipStep
         preview.fingers =  fingers
+        preview.nfiqValue = self.nfiqValue
         preview.client = self.client
         self.present(preview, animated: true, completion: nil)
     }

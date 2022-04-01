@@ -44,6 +44,7 @@ public class FingerprintPreviewController: UIViewController {
     var onCompleteBlock : ((Finger, Finger, Finger, Finger) -> Void)?
     var onSkipBlock : ((Finger, Finger, Finger, Finger) -> Void)?
     var skipStep: Bool = false
+    var nfiqValue = 45
     
     @IBAction func goBack(_ sender: UIButton) {
         self.back()
@@ -72,7 +73,7 @@ public class FingerprintPreviewController: UIViewController {
         continue_id.tintColor = .white
         continue_id.translatesAutoresizingMaskIntoConstraints = false
         
-        if fingers[0].score! > 45 {
+        if fingers[0].score! > nfiqValue {
             continue_id.setTitle("Continuar", for: .normal)
             continue_id.addTarget(self, action: #selector(continueFinger(_:)), for: .touchUpInside)
         } else {
