@@ -18,7 +18,6 @@ Pod::Spec.new do |s|
   s.public_header_files = "NebuIA/**/*.h"
   s.dependency 'Cartography', '~> 3.0'
   s.dependency 'NicoProgress'
-  s.dependency 'HSAttachmentPicker'
   s.dependency 'SDWebImageWebPCoder'
   s.info_plist = { 'CFBundleIdentifier' => 'com.distbit.NebuIA' }
   s.static_framework = true
