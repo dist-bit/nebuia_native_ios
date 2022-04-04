@@ -12,7 +12,6 @@ import Cartography
 public class FingerprintPreviewController: UIViewController {
     
     var fingers: [Finger]!
-    var client: Client!
     private var content_view: UIView!
     private var draw_detections: UIView!
     private var draw_detections_thin: UIView!

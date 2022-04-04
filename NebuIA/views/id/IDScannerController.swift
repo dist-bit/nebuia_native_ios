@@ -9,6 +9,7 @@ import UIKit
 import AVFoundation
 import Cartography
 
+@available(iOS 13.0, *)
 public class IDScannerController: UIViewController,  AVCaptureVideoDataOutputSampleBufferDelegate {
     
     private let photoOutput = AVCapturePhotoOutput()
@@ -17,7 +18,6 @@ public class IDScannerController: UIViewController,  AVCaptureVideoDataOutputSam
     private var stillImageOutput: AVCaptureVideoDataOutput!
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer!
     
-    var client: Client!
     var document: Document!
     var detector: DetectorWrapper!
     
@@ -341,7 +341,6 @@ public class IDScannerController: UIViewController,  AVCaptureVideoDataOutputSam
             DispatchQueue.main.async {
                 self.onCompleteUpload()
                 self.upload.document = self.document
-                self.upload.client = self.client
                 self.complete = true
                 self.present(self.upload, animated: true, completion: nil)
             }

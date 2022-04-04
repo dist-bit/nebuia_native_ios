@@ -22,7 +22,6 @@ public class FaceController: UIViewController, AVCaptureVideoDataOutputSampleBuf
     private var stillImageOutput: AVCaptureVideoDataOutput!
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer!
     
-    var client: Client!
     var detector: DetectorWrapper!
     
     private var detecting: Bool = false
@@ -330,7 +329,7 @@ public class FaceController: UIViewController, AVCaptureVideoDataOutputSampleBuf
             
             if(boxes.count == 1) {
                 
-                client.faceQuality(image: image) {data, error in
+                NebuIA.client.faceQuality(image: image) {data, error in
                     if error != nil {
                         self.detecting = false
                     }
@@ -342,7 +341,7 @@ public class FaceController: UIViewController, AVCaptureVideoDataOutputSampleBuf
                         
                         if score! > 55 {
                             // check face spoofing
-                            self.client.faceScanner(image: image) { data, error in
+                            NebuIA.client.faceScanner(image: image) { data, error in
                                 let status = self.decodePayload(data: data ?? false)
                                 if(status) {
                                     DispatchQueue.main.async {

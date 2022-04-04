@@ -10,6 +10,7 @@ import AVKit
 import AVFoundation
 import Cartography
 
+@available(iOS 13.0, *)
 public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     
     private var audioDevice: AVCaptureDevice!
@@ -27,7 +28,6 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     var videoWriter: AVAssetWriter!
     private var adaptor: AVAssetWriterInputPixelBufferAdaptor!
     
-    var client: Client!
     var detector: DetectorWrapper!
     var textToRead: [String]!
     
@@ -345,7 +345,7 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     
     func getNames() {
         var completeText: String = "Yo"
-        client.getReportSummary{ data, error in
+        NebuIA.client.getReportSummary{ data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
                 let payload = dict["payload"] as! Dictionary<String, Any>

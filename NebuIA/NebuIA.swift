@@ -5,10 +5,17 @@
 //  Created by Miguel on 25/06/21.
 //
 
+
+import UIKit
+import AVFoundation
+import Cartography
+import CoreServices
+
+
 @available(iOS 13.0, *)
 public class NebuIA {
     
-    private var client: Client!
+    static var client: Client!
     private var code: String!
     private var report: String!
     
@@ -17,27 +24,29 @@ public class NebuIA {
     private var address: Address = Address()
     private var detector = DetectorWrapper()
     
+    static var imagePicker: UIImagePickerController!
+    
     public init(controller: UIViewController) {
         let publickey = Bundle.main.object(forInfoDictionaryKey: "NebuIAPublicKey") as! String
         let secretKey = Bundle.main.object(forInfoDictionaryKey: "NebuIASecretKey") as! String
         ctr = controller;
-        client = Client(publicKey: publickey, secretKey: secretKey)
+        NebuIA.client = Client(publicKey: publickey, secretKey: secretKey)
     }
     
     public func setCode(code: String)  {
-        client.code = code
+        NebuIA.client.code = code
     }
     
     public func setClientURI(uri: String)  {
-        client.base = uri
+        NebuIA.client.base = uri
     }
     
     public func setReport(report: String) {
-        client.report = report
+        NebuIA.client.report = report
     }
     
     public func createReport(completion: ((String) -> Void)? = nil) {
-        client.createReport() { data, error in
+        NebuIA.client.createReport() { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
                 let report = dict["payload"] as? String
@@ -47,7 +56,7 @@ public class NebuIA {
     }
     
     public func saveEmail(email: String, completion: ((Bool) -> Void)? = nil) {
-        client.saveEmail(email: email) { data, error in
+        NebuIA.client.saveEmail(email: email) { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
                 let response = dict["status"] as! Bool
@@ -57,7 +66,7 @@ public class NebuIA {
     }
     
     public func savePhone(phone: String, completion: ((Bool) -> Void)? = nil) {
-        client.savePhone(phone: phone) { data, error in
+        NebuIA.client.savePhone(phone: phone) { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
                 let response = dict["status"] as! Bool
@@ -67,7 +76,7 @@ public class NebuIA {
     }
     
     public func generateEmailOTP(completion: ((Bool) -> Void)? = nil) {
-        client.sentEmailOTP() { data, error in
+        NebuIA.client.sentEmailOTP() { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
                 let response = dict["status"] as! Bool
@@ -77,7 +86,7 @@ public class NebuIA {
     }
     
     public func generatePhoneOTP(completion: ((Bool) -> Void)? = nil) {
-        client.sentPhoneOTP() { data, error in
+        NebuIA.client.sentPhoneOTP() { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
                 let response = dict["status"] as! Bool
@@ -88,7 +97,7 @@ public class NebuIA {
     
     // verify
     public func verifyPhoneOTP(otp: String, completion: ((Bool) -> Void)? = nil) {
-        client.validatePhoneOTP(otp: otp) { data, error in
+        NebuIA.client.validatePhoneOTP(otp: otp) { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
                 let response = dict["status"] as! Bool
@@ -98,7 +107,7 @@ public class NebuIA {
     }
     
     public func verifyEmailOTP(otp: String, completion: ((Bool) -> Void)? = nil) {
-        client.validatePhoneOTP(otp: otp) { data, error in
+        NebuIA.client.validatePhoneOTP(otp: otp) { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
                 let response = dict["status"] as! Bool
@@ -110,7 +119,6 @@ public class NebuIA {
     public func faceProof(completion: (() -> Void)? = nil) {
         let faceController = FaceController()
         faceController.detector = detector
-        faceController.client = client
         faceController.onComplete = completion
         ctr.present(faceController, animated: true, completion: nil)
     }
@@ -118,7 +126,6 @@ public class NebuIA {
     public func signerVideo(text: [String], completion: ((String) -> Void)? = nil) {
         let videoController = VideoController()
         videoController.detector = detector
-        videoController.client = client
         videoController.onCompleteVideo = completion
         videoController.textToRead = text
         ctr.present(videoController, animated: true, completion: nil)
@@ -127,25 +134,46 @@ public class NebuIA {
     public func idScanner(completion: (() -> Void)? = nil, error: (() -> Void)? = nil) {
         let idController = IDScannerController()
         idController.detector = detector
-        idController.client = client
         idController.document = document
         idController.onComplete = completion
         idController.onError = error
         ctr.present(idController, animated: true, completion: nil)
     }
     
+    
+    static var completionAddress: ((Dictionary<String, Any>) -> Void)? = nil
+    static var errorAddress: (() -> Void)? = nil
     public func takeAddress(completion: ((Dictionary<String, Any>) -> Void)? = nil, error: (() -> Void)? = nil) {
-        let addressController = AddressScannerController()
-        addressController.client = client
-        addressController.detector = detector
-        addressController.address = address
-        addressController.onComplete = completion
-        addressController.onError = error
-        ctr.present(addressController, animated: true, completion: nil)
+        
+        NebuIA.completionAddress = completion
+        NebuIA.errorAddress = error
+        
+        let optionMenu = UIAlertController(title: nil, message: "Selecciona una opción", preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title: "Cargar PDF", style: .default, handler: { action in
+            let picker = UIDocumentPickerViewController(documentTypes: [kUTTypePDF as String, kUTTypePNG as String, kUTTypeJPEG as String], in: .import)
+            picker.delegate = self.ctr
+            self.ctr.present(picker, animated: true, completion: nil)
+        })
+        let saveAction = UIAlertAction(title: "Capturar imagen desde cámara", style: .default, handler: { action in
+            NebuIA.imagePicker =  UIImagePickerController()
+            NebuIA.imagePicker.delegate = self.ctr
+            NebuIA.imagePicker.sourceType = .camera
+            self.ctr.present(NebuIA.imagePicker, animated: true, completion: nil)
+            
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancelar", style: .cancel)
+        
+        optionMenu.addAction(deleteAction)
+        optionMenu.addAction(saveAction)
+        optionMenu.addAction(cancelAction)
+        ctr.present(optionMenu, animated: true, completion: nil)
+    
     }
+
     
     public func saveAddress(address: String, completion: ((NSDictionary) -> Void)? = nil, onError: ((String) -> Void)? = nil) {
-        client.saveAddress(address: address) { data, error in
+        NebuIA.client.saveAddress(address: address) { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
                 let response = dict["payload"]!
@@ -162,7 +190,6 @@ public class NebuIA {
     public func fingerprintScanner(hand: Int, skipStep: Bool, qualityValue: Float, completion: ((Finger, Finger, Finger, Finger) -> Void)? = nil, skipWithFingers: ((Finger, Finger, Finger, Finger) -> Void)? = nil, skip: (() -> Void)? = nil) {
         let fingerprintController = FingerprintScannerController()
         fingerprintController.detector = detector
-        fingerprintController.client = client
         fingerprintController.onSkipWithFingerprint = skipWithFingers
         fingerprintController.onCompleteFingerprint = completion
         fingerprintController.onSkip = skip
@@ -173,7 +200,7 @@ public class NebuIA {
     }
     
     public func getDocumentIDSide(side: SIDE, completion: ((UIImage) -> Void)? = nil) {
-        client.getIDImage(side: side) { image, error in
+        NebuIA.client.getIDImage(side: side) { image, error in
             if image != nil {
                 completion!(image!)
             }
@@ -181,7 +208,7 @@ public class NebuIA {
     }
     
     public func getDocumentFace(completion: ((UIImage) -> Void)? = nil) {
-        client.getFaceImage() { image, error in
+        NebuIA.client.getFaceImage() { image, error in
             if image != nil {
                 completion!(image!)
             }
@@ -189,7 +216,7 @@ public class NebuIA {
     }
     
     public func getReportIDSummary(completion: ((Dictionary<String, Any>) -> Void)? = nil) {
-        client.getReportSummary{ data, error in
+        NebuIA.client.getReportSummary{ data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
                 completion!(dict)
@@ -198,7 +225,7 @@ public class NebuIA {
     }
     
     public func getFingerprintWSQ(image: UIImage, completion: ((Data) -> Void)? = nil) {
-        client.getFingerprintWSQ(image: image) { data, error in
+        NebuIA.client.getFingerprintWSQ(image: image) { data, error in
             if data != nil {
                 completion!(data!)
             }

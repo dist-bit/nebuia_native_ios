@@ -7,6 +7,7 @@
 
 import Foundation
 
+@available(iOS 13.0, *)
 extension VideoController {
     func canWrite() -> Bool {
         return isRecording

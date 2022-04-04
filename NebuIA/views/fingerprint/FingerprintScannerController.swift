@@ -17,7 +17,6 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
     private var stillImageOutput: AVCaptureVideoDataOutput!
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer!
     
-    var client: Client!
     var detector: DetectorWrapper!
     var position: Int!
     
@@ -483,7 +482,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
                 }
                 
                 // get image
-                client.fingerprints(image: image, position: position, completion: { data, error in
+                NebuIA.client.fingerprints(image: image, position: position, completion: { data, error in
                     self.setPercent(value: 0)
                     if error == nil {
                         let dict = data as! Dictionary<String, Any>
@@ -582,7 +581,6 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         preview.onDismmisBlock = self.onPreviewDissmis
         preview.skipStep = self.skipStep
         preview.fingers =  fingers
-        preview.client = self.client
         self.present(preview, animated: true, completion: nil)
     }
     
