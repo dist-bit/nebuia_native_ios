@@ -24,7 +24,7 @@ extension UIViewController: UIDocumentPickerDelegate, UIImagePickerControllerDel
         }
         
         let address: Address = Address()
-        address.setImage(data: selectedImage)
+        address.setImage(data: selectedImage.imageResize(scaledToWidth: CGFloat(870)))
         let preview = AddressPreviewController()
         preview.address = address
         preview.dismiss = dissmiss

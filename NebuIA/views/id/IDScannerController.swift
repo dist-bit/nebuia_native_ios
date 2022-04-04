@@ -59,11 +59,9 @@ public class IDScannerController: UIViewController,  AVCaptureVideoDataOutputSam
         back_button.backgroundColor =  UIColor(rgb: 0x2d2d2d)
         back_button.translatesAutoresizingMaskIntoConstraints = false
         
-        if #available(iOS 13.0, *) {
-            let btnImage = UIImage(systemName: "chevron.backward")
-            back_button.setImage(btnImage , for: .normal)
-            back_button.tintColor = UIColor(rgb: 0x6a6a6a)
-        }
+        let btnImage = UIImage(systemName: "chevron.backward")
+        back_button.setImage(btnImage , for: .normal)
+        back_button.tintColor = UIColor(rgb: 0x6a6a6a)
         back_button.addTarget(self, action: #selector(goBack(_:)), for: .touchUpInside)
     }
     

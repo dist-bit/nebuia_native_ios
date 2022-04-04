@@ -55,7 +55,8 @@ public class AddressPreviewController: UIViewController {
                 } else {
                     self.onErrorBlock!()
                 }
-                self.dismiss!()
+                
+                self.back()
             }
         } else {
             let pdfData = try? Data.init(contentsOf: address.pdf!)

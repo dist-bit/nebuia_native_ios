@@ -154,7 +154,7 @@ public class NebuIA {
             picker.delegate = self.ctr
             self.ctr.present(picker, animated: true, completion: nil)
         })
-        let saveAction = UIAlertAction(title: "Capturar imagen desde cámara", style: .default, handler: { action in
+        let saveAction = UIAlertAction(title: "Captura de cámara", style: .default, handler: { action in
             NebuIA.imagePicker =  UIImagePickerController()
             NebuIA.imagePicker.delegate = self.ctr
             NebuIA.imagePicker.sourceType = .camera
