@@ -42,23 +42,15 @@ extension UIViewController: UIDocumentPickerDelegate, UIImagePickerControllerDel
         
         var blockSuccess = false
         var outputFileURL: URL? = nil
-        
-        // Execute (synchronously, inline) a block of code that will copy the chosen file
-        // using iOS-coordinated read to cooperate on access to a file we do not own:
+    
         let coordinator = NSFileCoordinator()
         var error: NSError? = nil
         coordinator.coordinate(readingItemAt: firstFileURL, options: [], error: &error) { (externalFileURL) -> Void in
-            
-            // WARNING: use 'externalFileURL in this block, NOT 'firstFileURL' even though they are usually the same.
-            // They can be different depending on coordinator .options [] specified!
-            
-            // Create file URL to temp copy of file we will create:
             var tempURL = URL(fileURLWithPath: NSTemporaryDirectory())
             tempURL.appendPathComponent(externalFileURL.lastPathComponent)
             
             // Attempt copy
             do {
-                // If file with same name exists remove it (replace file with new one)
                 if FileManager.default.fileExists(atPath: tempURL.path) {
                     try FileManager.default.removeItem(atPath: tempURL.path)
                 }
@@ -106,7 +98,6 @@ extension UIViewController: UIDocumentPickerDelegate, UIImagePickerControllerDel
     
     
     public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        //print("view was cancelled")
         dismiss(animated: true, completion: nil)
     }
 }
