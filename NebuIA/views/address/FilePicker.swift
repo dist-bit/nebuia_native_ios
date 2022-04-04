@@ -5,8 +5,6 @@
 //  Created by Miguel Angel on 03/04/22.
 //
 
-import HSAttachmentPicker
-
 @available(iOS 13.0, *)
 extension UIViewController: UIDocumentPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
   
