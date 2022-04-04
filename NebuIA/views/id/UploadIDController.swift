@@ -9,10 +9,10 @@ import UIKit
 import AVFoundation
 import Cartography
 
+@available(iOS 13.0, *)
 public class UploadIDController: UIViewController {
     
     var document: Document!
-    var client: Client!
     private var content_view: UIView!
     
     private var status_button: UIButton!
@@ -250,7 +250,7 @@ public class UploadIDController: UIViewController {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if(document.back_crop_image != nil) {
-            client.uploadID(front: document.front_image!, back: document.back_image!) { data, error in
+            NebuIA.client.uploadID(front: document.front_image!, back: document.back_image!) { data, error in
                 if error != nil {
                     self.decodeResult(status: false)
                 } else {
@@ -260,7 +260,7 @@ public class UploadIDController: UIViewController {
             
             }
         } else {
-            client.uploadID(front: document.front_image!) { data, error in
+            NebuIA.client.uploadID(front: document.front_image!) { data, error in
                 if error != nil {
                     self.document.reset()
                     self.decodeResult(status: false)

@@ -10,10 +10,10 @@ import AVFoundation
 import Cartography
 import PDFKit
 
+@available(iOS 13.0, *)
 public class AddressPreviewController: UIViewController {
     
     var address: Address!
-    var client: Client!
     
     private var content_view: UIView!
     private var pdf_preview: PDFView!
@@ -28,9 +28,10 @@ public class AddressPreviewController: UIViewController {
     private var close: UIButton!
     private var retake: UIButton!
     
-    var onDismmisBlock : (() -> Void)?
+    //var onDismmisBlock : (() -> Void)?
     var onCompleteBlock : ((Dictionary<String, Any>) -> Void)?
     var onErrorBlock : (() -> Void)?
+    var dismiss : (() -> Void)?
     
     @IBAction func goBack(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -44,7 +45,7 @@ public class AddressPreviewController: UIViewController {
         }
         
         if address.image != nil {
-            client.uploadAddressImage(image: address.image!) { data, error in
+            NebuIA.client.uploadAddressImage(image: address.image!) { data, error in
                 self.address.reset()
                 let status = self.decodePayload(data: data!)
                 self.hideLoading()
@@ -54,10 +55,12 @@ public class AddressPreviewController: UIViewController {
                 } else {
                     self.onErrorBlock!()
                 }
+                
+                self.back()
             }
         } else {
             let pdfData = try? Data.init(contentsOf: address.pdf!)
-            client.uploadAddressPDF(pdf: pdfData!) { data, error in
+            NebuIA.client.uploadAddressPDF(pdf: pdfData!) { data, error in
                 self.address.reset()
                 let status = self.decodePayload(data: data!)
                 self.hideLoading()
@@ -67,6 +70,7 @@ public class AddressPreviewController: UIViewController {
                 } else {
                     self.onErrorBlock!()
                 }
+                self.back()
             }
         }
     }
@@ -97,11 +101,11 @@ public class AddressPreviewController: UIViewController {
         continue_id.backgroundColor = UIColor(rgb: 0xa6cc3b)
         continue_id.translatesAutoresizingMaskIntoConstraints = false
         
-        if #available(iOS 13.0, *) {
-            let btnImage = UIImage(systemName: "checkmark")
-            continue_id.setImage(btnImage , for: .normal)
-            continue_id.tintColor = .white
-        }
+        
+        let btnImage = UIImage(systemName: "checkmark")
+        continue_id.setImage(btnImage , for: .normal)
+        continue_id.tintColor = .white
+        
         
         continue_id.addTarget(self, action: #selector(getAddressFromFile(_:)), for: .touchUpInside)
     }
@@ -120,13 +124,13 @@ public class AddressPreviewController: UIViewController {
         retake.backgroundColor =  UIColor(rgb: 0x2d2d2d)
         retake.translatesAutoresizingMaskIntoConstraints = false
         
-        if #available(iOS 13.0, *) {
-            let btnImage = UIImage(systemName: "arrow.triangle.2.circlepath")
-            retake.setImage(btnImage , for: .normal)
-            retake.tintColor = UIColor(rgb: 0x6a6a6a)
-        }
         
-      
+        let btnImage = UIImage(systemName: "arrow.triangle.2.circlepath")
+        retake.setImage(btnImage , for: .normal)
+        retake.tintColor = UIColor(rgb: 0x6a6a6a)
+        
+        
+        
         retake.translatesAutoresizingMaskIntoConstraints = false
         retake.addTarget(self, action: #selector(goBack(_:)), for: .touchUpInside)
     }
@@ -145,13 +149,13 @@ public class AddressPreviewController: UIViewController {
         close.backgroundColor =  UIColor(rgb: 0x2d2d2d)
         close.translatesAutoresizingMaskIntoConstraints = false
         
-        if #available(iOS 13.0, *) {
-            let btnImage = UIImage(systemName: "xmark")
-            close.setImage(btnImage , for: .normal)
-            close.tintColor = UIColor(rgb: 0x6a6a6a)
-        }
         
-      
+        let btnImage = UIImage(systemName: "xmark")
+        close.setImage(btnImage , for: .normal)
+        close.tintColor = UIColor(rgb: 0x6a6a6a)
+        
+        
+        
         close.translatesAutoresizingMaskIntoConstraints = false
         close.addTarget(self, action: #selector(goBack(_:)), for: .touchUpInside)
     }
@@ -196,7 +200,7 @@ public class AddressPreviewController: UIViewController {
     }
     
     func loadFileFromLocalPath(_ localFilePath: String) ->Data? {
-       return try? Data(contentsOf: URL(fileURLWithPath: localFilePath))
+        return try? Data(contentsOf: URL(fileURLWithPath: localFilePath))
     }
     
     private func buildPDFPreview() {
@@ -205,7 +209,7 @@ public class AddressPreviewController: UIViewController {
         pdf_preview.translatesAutoresizingMaskIntoConstraints = false
         
         if address.pdf != nil {
-          
+            
             if let document = PDFDocument(url: address.pdf!) {
                 pdf_preview.document = document
                 pdf_preview.isHidden = false
@@ -293,7 +297,7 @@ public class AddressPreviewController: UIViewController {
         
         buildPDFPreview()
         content_view.addSubview(pdf_preview)
-    
+        
         
         
         let root_view = UIView(frame: UIScreen.main.bounds)
@@ -310,7 +314,8 @@ public class AddressPreviewController: UIViewController {
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        onDismmisBlock!()
+        self.dismiss(animated: true, completion: nil)
+        //onDismmisBlock!()
     }
     
     
@@ -320,7 +325,7 @@ public class AddressPreviewController: UIViewController {
     
     
     private func back() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+        DispatchQueue.main.sync {
             self.dismiss(animated: true, completion: nil)
         }
     }
