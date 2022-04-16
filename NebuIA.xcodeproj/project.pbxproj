@@ -37,7 +37,6 @@
 		054DC0A7273EE7D500330B59 /* FingerprintScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC09A273EE7D500330B59 /* FingerprintScannerController.swift */; };
 		054DC0A8273EE7D500330B59 /* LoadingDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC09B273EE7D500330B59 /* LoadingDialog.swift */; };
 		054DC0A9273EE7D500330B59 /* FaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC09D273EE7D500330B59 /* FaceController.swift */; };
-		054DC0AA273EE7D500330B59 /* AddressScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC09F273EE7D500330B59 /* AddressScannerController.swift */; };
 		054DC0AB273EE7D500330B59 /* AddressPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC0A0273EE7D500330B59 /* AddressPreviewController.swift */; };
 		054DC0AC273EE7D500330B59 /* DocumentIDPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC0A2273EE7D500330B59 /* DocumentIDPreview.swift */; };
 		054DC0AD273EE7D500330B59 /* IDScannerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC0A3273EE7D500330B59 /* IDScannerController.swift */; };
@@ -50,6 +49,7 @@
 		4979744326B6101700AE808B /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4979744226B6101700AE808B /* libc++.tbd */; };
 		49F0CBAF267FAE5900460B99 /* NebuIA.h in Headers */ = {isa = PBXBuildFile; fileRef = 49F0CBAD267FAE5900460B99 /* NebuIA.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C09BEA51078F901EF932AA7 /* Pods_NebuIA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0533A61E0ABD5121D2DE0E08 /* Pods_NebuIA.framework */; };
+		8BFC7FEA280A88CD009F7BA3 /* FilePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFC7FE9280A88CD009F7BA3 /* FilePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,7 +84,6 @@
 		054DC09A273EE7D500330B59 /* FingerprintScannerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FingerprintScannerController.swift; sourceTree = "<group>"; };
 		054DC09B273EE7D500330B59 /* LoadingDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingDialog.swift; sourceTree = "<group>"; };
 		054DC09D273EE7D500330B59 /* FaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaceController.swift; sourceTree = "<group>"; };
-		054DC09F273EE7D500330B59 /* AddressScannerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressScannerController.swift; sourceTree = "<group>"; };
 		054DC0A0273EE7D500330B59 /* AddressPreviewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressPreviewController.swift; sourceTree = "<group>"; };
 		054DC0A2273EE7D500330B59 /* DocumentIDPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentIDPreview.swift; sourceTree = "<group>"; };
 		054DC0A3273EE7D500330B59 /* IDScannerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IDScannerController.swift; sourceTree = "<group>"; };
@@ -100,6 +99,7 @@
 		49F0CBAD267FAE5900460B99 /* NebuIA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NebuIA.h; sourceTree = "<group>"; };
 		49F0CBAE267FAE5900460B99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FDAB0B5E5B0186966B674AD /* Pods-NebuIA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NebuIA.release.xcconfig"; path = "Target Support Files/Pods-NebuIA/Pods-NebuIA.release.xcconfig"; sourceTree = "<group>"; };
+		8BFC7FE9280A88CD009F7BA3 /* FilePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilePicker.swift; sourceTree = "<group>"; };
 		D36CC53373AC2E1DE4B1E90E /* Pods-NebuIA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NebuIA.debug.xcconfig"; path = "Target Support Files/Pods-NebuIA/Pods-NebuIA.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -212,7 +212,7 @@
 		054DC09E273EE7D500330B59 /* address */ = {
 			isa = PBXGroup;
 			children = (
-				054DC09F273EE7D500330B59 /* AddressScannerController.swift */,
+				8BFC7FE9280A88CD009F7BA3 /* FilePicker.swift */,
 				054DC0A0273EE7D500330B59 /* AddressPreviewController.swift */,
 			);
 			path = address;
@@ -428,11 +428,11 @@
 				054DC07D273EE7C300330B59 /* Document.swift in Sources */,
 				054DC08F273EE7CD00330B59 /* detector_wrapper.mm in Sources */,
 				054DC0A9273EE7D500330B59 /* FaceController.swift in Sources */,
-				054DC0AA273EE7D500330B59 /* AddressScannerController.swift in Sources */,
 				054DC071273EE7BC00330B59 /* Recorder.swift in Sources */,
 				054DC0A8273EE7D500330B59 /* LoadingDialog.swift in Sources */,
 				054DC065273EE7B500330B59 /* RequestExtension.swift in Sources */,
 				054DC07E273EE7C300330B59 /* Finger.swift in Sources */,
+				8BFC7FEA280A88CD009F7BA3 /* FilePicker.swift in Sources */,
 				054DC066273EE7B500330B59 /* Client.swift in Sources */,
 				054DC0AD273EE7D500330B59 /* IDScannerController.swift in Sources */,
 			);
