@@ -107,7 +107,7 @@ public class NebuIA {
     }
     
     public func verifyEmailOTP(otp: String, completion: ((Bool) -> Void)? = nil) {
-        NebuIA.client.validatePhoneOTP(otp: otp) { data, error in
+        NebuIA.client.validateEmailOTP(otp: otp) { data, error in
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
                 let response = dict["status"] as! Bool
