@@ -224,8 +224,7 @@ Inference::detect(UIImage *image, int items) const {
     CGContextRef contextRef = CGBitmapContextCreate(rgba, width, height, 8, width * 4, colorSpace, kCGImageAlphaNoneSkipLast | kCGBitmapByteOrderDefault);
     CGContextDrawImage(contextRef, CGRectMake(0, 0, width, height), image.CGImage);
     CGContextRelease(contextRef);
-    
-    // parameters which might change for different model
+
     const float prob_threshold = 0.8f;
     const float nms_threshold = 0.95f;
     
@@ -264,6 +263,7 @@ Inference::detect(UIImage *image, int items) const {
         generate_proposals(pred, 8, in_pad, prob_threshold, objects8, items);
         
         proposals.insert(proposals.end(), objects8.begin(), objects8.end());
+        pred.release();
     }
     
     {
@@ -274,6 +274,7 @@ Inference::detect(UIImage *image, int items) const {
         generate_proposals(pred, 16, in_pad, prob_threshold, objects16, items);
         
         proposals.insert(proposals.end(), objects16.begin(), objects16.end());
+        pred.release();
     }
     
     {
@@ -284,6 +285,7 @@ Inference::detect(UIImage *image, int items) const {
         generate_proposals(pred, 32, in_pad, prob_threshold, objects32, items);
         
         proposals.insert(proposals.end(), objects32.begin(), objects32.end());
+        pred.release();
     }
     
     {
@@ -294,6 +296,7 @@ Inference::detect(UIImage *image, int items) const {
         generate_proposals(pred, 64, in_pad, prob_threshold, objects64, items);
         
         proposals.insert(proposals.end(), objects64.begin(), objects64.end());
+        pred.release();
     }
     
     qsort_descent_inplace(proposals);
@@ -318,15 +321,15 @@ Inference::detect(UIImage *image, int items) const {
         
         proposals[i].x = x0;
         proposals[i].y = y0;
-        proposals[i].w = x1 - x0;
-        proposals[i].h = y1 - y0;
+        proposals[i].w = x1;
+        proposals[i].h = y1;
     }
     
     in.release();
-    
-    return proposals;
+    in_pad.release();
     
     delete[] rgba;
     return proposals;
 }
+
 
