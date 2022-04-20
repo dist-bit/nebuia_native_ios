@@ -31,11 +31,13 @@ public:
 
     ~Inference();
 
-    std::vector<Object> detect(UIImage *image) const;
+    std::vector<Object> detect(UIImage *image, int items) const;
 
 private:
     ncnn::Net *Net;
-    int target_size = 416;
+    int target_size = 320;
+    const float mean_values[3] = {103.53f, 116.28f, 123.675f};
+    const float norm_values[3] = {0.017429f, 0.017507f, 0.017125f};
     ncnn::UnlockedPoolAllocator blob_pool_allocator;
     ncnn::PoolAllocator workspace_pool_allocator;
 };

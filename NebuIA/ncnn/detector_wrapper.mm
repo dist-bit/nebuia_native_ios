@@ -36,7 +36,7 @@
 
     NSMutableArray<Detection *> *detections = [[NSMutableArray alloc] init];
     std::vector<Object> boxs;
-    boxs = self.IDInference->detect(image);
+    boxs = self.IDInference->detect(image, 3);
     for (int i = 0; i < boxs.size(); i++) {
         Object box = boxs[i];
         NSString *label = [NSString stringWithUTF8String:self.id->labels[box.label].c_str()];
@@ -55,7 +55,7 @@
 
     NSMutableArray<Detection *> *detections = [[NSMutableArray alloc] init];
     std::vector<Object> boxs;
-    boxs = self.FingerInference->detect(image);
+    boxs = self.FingerInference->detect(image, 1);
     for (int i = 0; i < boxs.size(); i++) {
         Object box = boxs[i];
         NSString *label = [NSString stringWithUTF8String:"finger"];

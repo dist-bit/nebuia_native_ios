@@ -19,7 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<Detection *> *)detectID:(UIImage *)image;
 - (NSArray<Detection *> *)detectFingerprints:(UIImage *)image;
 - (NSArray<Detection *> *)detectFace:(UIImage *)image;
-- (NSArray<Detection *> *)detectDocument:(UIImage *)image;
 // utils
 - (float)qualityFingerprint:(UIImage *)image;
 @end
