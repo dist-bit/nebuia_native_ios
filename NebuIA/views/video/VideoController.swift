@@ -19,7 +19,6 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     private var stillImageOutput: AVCaptureVideoDataOutput!
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer!
     
-    
     fileprivate lazy var audioDataOutput = AVCaptureAudioDataOutput()
     fileprivate var videoWriterInput: AVAssetWriterInput!
     fileprivate var audioWriterInput: AVAssetWriterInput!
@@ -30,6 +29,7 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
     
     var detector: DetectorWrapper!
     var textToRead: [String]!
+    var getNameFromId: Bool!
     
     private var detecting: Bool = true
     private var complete: Bool = false
@@ -71,10 +71,8 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
         let originalLength = textToRead.count
 
         if originalLength == textPosition + 2 {
-            if #available(iOS 13.0, *) {
-                let btnImage = UIImage(systemName: "checkmark")
-                scan_id_button.setImage(btnImage , for: .normal)
-            }
+            let btnImage = UIImage(systemName: "checkmark")
+            scan_id_button.setImage(btnImage , for: .normal)
         }
         
         if originalLength != textPosition + 1 {
@@ -102,12 +100,10 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
         scan_id_button.backgroundColor =  UIColor(rgb: 0xa5cd3a)
         scan_id_button.translatesAutoresizingMaskIntoConstraints = false
         
-        if #available(iOS 13.0, *) {
-            let btnImage = textToRead.count == textPosition + 1 ? UIImage(systemName: "checkmark") : UIImage(systemName: "arrow.forward")
-            
-            scan_id_button.setImage(btnImage , for: .normal)
-            scan_id_button.tintColor = UIColor.white
-        }
+        let btnImage = textToRead.count == textPosition + 1 ? UIImage(systemName: "checkmark") : UIImage(systemName: "arrow.forward")
+        
+        scan_id_button.setImage(btnImage , for: .normal)
+        scan_id_button.tintColor = UIColor.white
         scan_id_button.addTarget(self, action: #selector(analyseID(_:)), for: .touchUpInside)
         scan_id_button.isHidden = true
     }
@@ -170,12 +166,16 @@ public class VideoController: UIViewController, AVCaptureVideoDataOutputSampleBu
         text_to_read_label.textAlignment = .center
         text_to_read_label.numberOfLines = 14
         text_to_read_label.textColor = .white
-        text_to_read_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 11), weight: .regular)
-        text_to_read_label.minimumScaleFactor = 11/UIFont.labelFontSize
+        text_to_read_label.font = UIFont.systemFont(ofSize: dynamicFontSizeForIphone(fontSize: 12), weight: .regular)
+        text_to_read_label.minimumScaleFactor = 12/UIFont.labelFontSize
         text_to_read_label.adjustsFontSizeToFitWidth = true
         
-        // get names
-        getNames()
+        // try to extract names from id
+        if(getNameFromId) {
+            getNames()
+        } else {
+            self.text_to_read_label.text = self.textToRead[0]
+        }
         
         text_to_read = UIView(frame: UIScreen.main.bounds)
         text_to_read.backgroundColor = UIColor(rgb: 0x232a58)
