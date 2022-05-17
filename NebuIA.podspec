@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name          = "NebuIA"
-  s.version       = "0.0.40"
+  s.version       = "0.0.41"
   s.summary       = "iOS SDK for NebuIA"
   s.description   = "iOS SDK for NebuIA SDK"
   s.homepage      = "https://github.com/dist-bit/nebuia_native_ios"
@@ -18,7 +18,6 @@ Pod::Spec.new do |s|
   s.public_header_files = "NebuIA/**/*.h"
   s.dependency 'Cartography', '~> 3.0'
   s.dependency 'NicoProgress'
-  s.dependency 'SDWebImageWebPCoder'
   s.info_plist = { 'CFBundleIdentifier' => 'com.distbit.NebuIA' }
   s.pod_target_xcconfig = { 'VALID_ARCHS[sdk=iphonesimulator*]' => '' }
   s.static_framework = true
