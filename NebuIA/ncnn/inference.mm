@@ -225,8 +225,8 @@ Inference::detect(UIImage *image, int items) const {
     CGContextDrawImage(contextRef, CGRectMake(0, 0, width, height), image.CGImage);
     CGContextRelease(contextRef);
 
-    const float prob_threshold = 0.8f;
-    const float nms_threshold = 0.95f;
+    const float prob_threshold = 0.75f;
+    const float nms_threshold = 0.9f;
     
     auto w = width;
     auto h = height;

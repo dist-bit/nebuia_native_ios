@@ -339,7 +339,7 @@ public class FaceController: UIViewController, AVCaptureVideoDataOutputSampleBuf
                     if(payload != nil) {
                         let score = payload!["payload"]
                         
-                        if score! > 55 {
+                        if score! > 60 {
                             // check face spoofing
                             NebuIA.client.faceScanner(image: image) { data, error in
                                 let status = self.decodePayload(data: data ?? false)
