@@ -48,7 +48,7 @@ public class Client {
         let url = URL(string: "\(base)/face?report=\(report)")!
         var request = URLRequest(url: url)
         
-        guard let imageData = image.jpegData(compressionQuality: 75.0) else {
+        guard let imageData = image.jpegData(compressionQuality: 80.0) else {
             return
         }
         

@@ -6,7 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "detection.h"
+#import "DetectionItem.h"
 #import "id.h"
 #import "face.h"
 #import "inference.h"
@@ -16,9 +16,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DetectorWrapper : NSObject
-- (NSArray<Detection *> *)detectID:(UIImage *)image;
-- (NSArray<Detection *> *)detectFingerprints:(UIImage *)image;
-- (NSArray<Detection *> *)detectFace:(UIImage *)image;
+- (NSArray<DetectionItem *> *)detectID:(UIImage *)image;
+- (NSArray<DetectionItem *> *)detectFingerprints:(UIImage *)image;
+- (NSArray<DetectionItem *> *)detectFace:(UIImage *)image;
 // utils
 - (float)qualityFingerprint:(UIImage *)image;
 @end

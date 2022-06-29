@@ -32,9 +32,9 @@
     return self;
 }
 
-- (NSArray<Detection *> *)detectID:(UIImage *)image {
+- (NSArray<DetectionItem *> *)detectID:(UIImage *)image {
 
-    NSMutableArray<Detection *> *detections = [[NSMutableArray alloc] init];
+    NSMutableArray<DetectionItem *> *detections = [[NSMutableArray alloc] init];
     std::vector<Object> boxs;
     boxs = self.IDInference->detect(image, 3);
     for (int i = 0; i < boxs.size(); i++) {
@@ -45,15 +45,15 @@
         CGFloat y1 = (CGFloat)box.y;
         CGFloat x2 = (CGFloat)box.w;
         CGFloat y2 = (CGFloat)box.h;
-        Detection * detection = [[Detection alloc]initWithParams:label score:score x1:x1 y1:y1 x2:x2 y2:y2];
+        DetectionItem * detection = [[DetectionItem alloc]initWithParams:label score:score x1:x1 y1:y1 x2:x2 y2:y2];
         [detections addObject:detection];
     }
     return detections;
 }
 
-- (NSArray<Detection *> *)detectFingerprints:(UIImage *)image {
+- (NSArray<DetectionItem *> *)detectFingerprints:(UIImage *)image {
 
-    NSMutableArray<Detection *> *detections = [[NSMutableArray alloc] init];
+    NSMutableArray<DetectionItem *> *detections = [[NSMutableArray alloc] init];
     std::vector<Object> boxs;
     boxs = self.FingerInference->detect(image, 1);
     for (int i = 0; i < boxs.size(); i++) {
@@ -64,15 +64,15 @@
         CGFloat y1 = (CGFloat)box.y;
         CGFloat x2 = (CGFloat)box.w;
         CGFloat y2 = (CGFloat)box.h;
-        Detection * detection = [[Detection alloc]initWithParams:label score:score x1:x1 y1:y1 x2:x2 y2:y2];
+        DetectionItem * detection = [[DetectionItem alloc]initWithParams:label score:score x1:x1 y1:y1 x2:x2 y2:y2];
         [detections addObject:detection];
     }
     return detections;
 }
 
-- (NSArray<Detection *> *)detectFace:(UIImage *)image {
+- (NSArray<DetectionItem *> *)detectFace:(UIImage *)image {
 
-    NSMutableArray<Detection *> *detections = [[NSMutableArray alloc] init];
+    NSMutableArray<DetectionItem *> *detections = [[NSMutableArray alloc] init];
     std::vector<BoxInfo> boxs;
     boxs = self.face->detect(image);
     for (int i = 0; i < boxs.size(); i++) {
@@ -83,7 +83,7 @@
         CGFloat y1 = (CGFloat)box.y1;
         CGFloat x2 = (CGFloat)box.x2;
         CGFloat y2 = (CGFloat)box.y2;
-        Detection * detection = [[Detection alloc]initWithParams:label score:score x1:x1 y1:y1 x2:x2 y2:y2];
+        DetectionItem * detection = [[DetectionItem alloc]initWithParams:label score:score x1:x1 y1:y1 x2:x2 y2:y2];
         [detections addObject:detection];
     }
     return detections;

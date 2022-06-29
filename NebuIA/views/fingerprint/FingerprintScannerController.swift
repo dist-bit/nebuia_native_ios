@@ -443,7 +443,7 @@ public class FingerprintScannerController: UIViewController,  AVCaptureVideoData
         
             
             let image = sampleBuffer.toUIImage()
-            let detections = detector.detectFingerprints(image) as [Detection]
+            let detections = detector.detectFingerprints(image) as [DetectionItem]
             
             var scores = [Float]()
             var rects = [CGRect]()

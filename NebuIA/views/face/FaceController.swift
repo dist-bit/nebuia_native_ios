@@ -389,7 +389,7 @@ public class FaceController: UIViewController, AVCaptureVideoDataOutputSampleBuf
         }
     }
     
-    private func filterdetection(detection: Detection, image: UIImage) {
+    private func filterdetection(detection: DetectionItem, image: UIImage) {
         if scanFront {
             if(detection.label == "mx_id_front") {
                 frontCount += 1

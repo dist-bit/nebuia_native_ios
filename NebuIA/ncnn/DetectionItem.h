@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Detection : NSObject
+@interface DetectionItem : NSObject
 
 @property (strong, nonatomic) NSString *label;
 @property (assign, nonatomic) CGFloat score;

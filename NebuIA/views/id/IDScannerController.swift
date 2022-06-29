@@ -361,7 +361,7 @@ public class IDScannerController: UIViewController,  AVCaptureVideoDataOutputSam
         }
     }
     
-    private func cropdocument(image: UIImage, detection: Detection) {
+    private func cropdocument(image: UIImage, detection: DetectionItem) {
         let crop = image.crop(rect: detection.rect())
         self.document.setImage(crop: crop, original: image)
         self.document.current_type = detection.label
@@ -390,7 +390,7 @@ public class IDScannerController: UIViewController,  AVCaptureVideoDataOutputSam
     }
     
 
-    private func filterdetection(detection: Detection, image: UIImage) {
+    private func filterdetection(detection: DetectionItem, image: UIImage) {
         if(self.document.document_side == Side.FRONT) {
             if(detection.label == "mx_id_front" || detection.label == "mx_passport_front") {
                 self.cropdocument(image: image, detection: detection)

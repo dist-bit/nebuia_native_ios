@@ -5,9 +5,9 @@
 //  Created by Miguel Angel on 28/07/21.
 //
 
-#import "detection.h"
+#import "DetectionItem.h"
 
-@implementation Detection
+@implementation DetectionItem
 
 -(id)initWithParams:(NSString *)label_
               score:(CGFloat)score_

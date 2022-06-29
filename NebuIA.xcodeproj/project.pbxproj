@@ -25,12 +25,12 @@
 		054DC07F273EE7C300330B59 /* Side.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC07B273EE7C300330B59 /* Side.swift */; };
 		054DC08B273EE7CD00330B59 /* inference.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC081273EE7CD00330B59 /* inference.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054DC08D273EE7CD00330B59 /* inference.mm in Sources */ = {isa = PBXBuildFile; fileRef = 054DC083273EE7CD00330B59 /* inference.mm */; };
-		054DC08E273EE7CD00330B59 /* detection.m in Sources */ = {isa = PBXBuildFile; fileRef = 054DC084273EE7CD00330B59 /* detection.m */; };
+		054DC08E273EE7CD00330B59 /* DetectionItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 054DC084273EE7CD00330B59 /* DetectionItem.m */; };
 		054DC08F273EE7CD00330B59 /* detector_wrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 054DC085273EE7CD00330B59 /* detector_wrapper.mm */; };
 		054DC090273EE7CD00330B59 /* detector_wrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC086273EE7CD00330B59 /* detector_wrapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054DC091273EE7CD00330B59 /* face.mm in Sources */ = {isa = PBXBuildFile; fileRef = 054DC087273EE7CD00330B59 /* face.mm */; };
 		054DC092273EE7CD00330B59 /* id.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC088273EE7CD00330B59 /* id.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		054DC093273EE7CD00330B59 /* detection.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC089273EE7CD00330B59 /* detection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		054DC093273EE7CD00330B59 /* DetectionItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC089273EE7CD00330B59 /* DetectionItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054DC094273EE7CD00330B59 /* face.h in Headers */ = {isa = PBXBuildFile; fileRef = 054DC08A273EE7CD00330B59 /* face.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		054DC0A5273EE7D500330B59 /* VideoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC097273EE7D500330B59 /* VideoController.swift */; };
 		054DC0A6273EE7D500330B59 /* FingerprintPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054DC099273EE7D500330B59 /* FingerprintPreview.swift */; };
@@ -72,12 +72,12 @@
 		054DC07B273EE7C300330B59 /* Side.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Side.swift; sourceTree = "<group>"; };
 		054DC081273EE7CD00330B59 /* inference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inference.h; sourceTree = "<group>"; };
 		054DC083273EE7CD00330B59 /* inference.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = inference.mm; sourceTree = "<group>"; };
-		054DC084273EE7CD00330B59 /* detection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = detection.m; sourceTree = "<group>"; };
+		054DC084273EE7CD00330B59 /* DetectionItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetectionItem.m; sourceTree = "<group>"; };
 		054DC085273EE7CD00330B59 /* detector_wrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = detector_wrapper.mm; sourceTree = "<group>"; };
 		054DC086273EE7CD00330B59 /* detector_wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = detector_wrapper.h; sourceTree = "<group>"; };
 		054DC087273EE7CD00330B59 /* face.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = face.mm; sourceTree = "<group>"; };
 		054DC088273EE7CD00330B59 /* id.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = id.h; sourceTree = "<group>"; };
-		054DC089273EE7CD00330B59 /* detection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = detection.h; sourceTree = "<group>"; };
+		054DC089273EE7CD00330B59 /* DetectionItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetectionItem.h; sourceTree = "<group>"; };
 		054DC08A273EE7CD00330B59 /* face.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = face.h; sourceTree = "<group>"; };
 		054DC097273EE7D500330B59 /* VideoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoController.swift; sourceTree = "<group>"; };
 		054DC099273EE7D500330B59 /* FingerprintPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FingerprintPreview.swift; sourceTree = "<group>"; };
@@ -158,12 +158,12 @@
 			children = (
 				054DC081273EE7CD00330B59 /* inference.h */,
 				054DC083273EE7CD00330B59 /* inference.mm */,
-				054DC084273EE7CD00330B59 /* detection.m */,
+				054DC084273EE7CD00330B59 /* DetectionItem.m */,
 				054DC085273EE7CD00330B59 /* detector_wrapper.mm */,
 				054DC086273EE7CD00330B59 /* detector_wrapper.h */,
 				054DC087273EE7CD00330B59 /* face.mm */,
 				054DC088273EE7CD00330B59 /* id.h */,
-				054DC089273EE7CD00330B59 /* detection.h */,
+				054DC089273EE7CD00330B59 /* DetectionItem.h */,
 				054DC08A273EE7CD00330B59 /* face.h */,
 				05620FD527D4817C00D1CE15 /* quality.mm */,
 				05620FD627D4817C00D1CE15 /* quality.h */,
@@ -301,7 +301,7 @@
 			files = (
 				054DC090273EE7CD00330B59 /* detector_wrapper.h in Headers */,
 				054DC08B273EE7CD00330B59 /* inference.h in Headers */,
-				054DC093273EE7CD00330B59 /* detection.h in Headers */,
+				054DC093273EE7CD00330B59 /* DetectionItem.h in Headers */,
 				054DC094273EE7CD00330B59 /* face.h in Headers */,
 				05620FD827D4817C00D1CE15 /* quality.h in Headers */,
 				054DC092273EE7CD00330B59 /* id.h in Headers */,
@@ -414,7 +414,7 @@
 				054DC0A5273EE7D500330B59 /* VideoController.swift in Sources */,
 				054DC0AB273EE7D500330B59 /* AddressPreviewController.swift in Sources */,
 				054DC075273EE7BC00330B59 /* Font.swift in Sources */,
-				054DC08E273EE7CD00330B59 /* detection.m in Sources */,
+				054DC08E273EE7CD00330B59 /* DetectionItem.m in Sources */,
 				054DC0A7273EE7D500330B59 /* FingerprintScannerController.swift in Sources */,
 				490522772686478200617471 /* NebuIA.swift in Sources */,
 				054DC074273EE7BC00330B59 /* Device.swift in Sources */,
