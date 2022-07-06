@@ -51,6 +51,7 @@ public class NebuIA {
             if data != nil {
                 let dict = data as! Dictionary<String, Any>
                 let report = dict["payload"] as? String
+                self.setReport(report: report!)
                 completion!(report!)
             }
         }
