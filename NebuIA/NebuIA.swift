@@ -9,7 +9,8 @@
 import UIKit
 import AVFoundation
 import Cartography
-import CoreServices
+import MobileCoreServices
+import UniformTypeIdentifiers
 
 
 @available(iOS 13.0, *)
@@ -152,7 +153,12 @@ public class NebuIA {
         
         let optionMenu = UIAlertController(title: nil, message: "Selecciona una opción", preferredStyle: .actionSheet)
         let deleteAction = UIAlertAction(title: "Cargar PDF", style: .default, handler: { action in
-            let picker = UIDocumentPickerViewController(documentTypes: [kUTTypePDF as String, kUTTypePNG as String, kUTTypeJPEG as String], in: .import)
+            let picker: UIDocumentPickerViewController
+            if #available(iOS 14.0, *) {
+                picker = UIDocumentPickerViewController(documentTypes: [UTType.pdf.identifier], in: .import)
+            } else {
+                picker = UIDocumentPickerViewController(documentTypes: [kUTTypePDF as String], in: .import)
+            }
             picker.delegate = self.ctr
             self.ctr.present(picker, animated: true, completion: nil)
         })
@@ -235,3 +241,4 @@ public class NebuIA {
     }
     
 }
+
