@@ -23,6 +23,7 @@ public class FaceController: UIViewController, AVCaptureVideoDataOutputSampleBuf
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer!
     
     var detector: DetectorWrapper!
+    var useIDShow: Bool = false
     
     private var detecting: Bool = false
     private var complete: Bool = false
@@ -339,20 +340,31 @@ public class FaceController: UIViewController, AVCaptureVideoDataOutputSampleBuf
                     if(payload != nil) {
                         let score = payload!["payload"]
                         
-                        if score! > 60 {
+                        if score! > 65 {
                             // check face spoofing
-                            NebuIA.client.faceScanner(image: image) { data, error in
+                            NebuIA.client.faceScanner(image: image) { [self] data, error in
                                 let status = self.decodePayload(data: data ?? false)
                                 if(status) {
-                                    DispatchQueue.main.async {
-                                        self.faceComplete = true
-                                        self.scanFront = true
-                                        self.setActionText(text: "Por favor muestra la parte frontal de tu identificación oficial INE/IFE", action: "Esperando parte frontal de tu ID", vibrate: true)
+                                    if(self.useIDShow) {
+                                        // analize ID
+                                        DispatchQueue.main.async {
+                                            self.faceComplete = true
+                                            self.scanFront = true
+                                            self.setActionText(text: "Por favor muestra la parte frontal de tu identificación oficial INE/IFE", action: "Esperando parte frontal de tu ID", vibrate: true)
+                                            // continue detection
+                                            self.detecting = false
+                                        }
+                                    } else {
+                                        // continue without id
+                                        DispatchQueue.main.async {
+                                            self.setActionText(text: "Proceso finalizado, espera por favor", action: "Proceso finalizado", vibrate: true)
+                                            self.back()
+                                        }
                                     }
+                                } else {
+                                    // continue detection
+                                    self.detecting = false
                                 }
-                                
-                                self.detecting = false
-                                
                             }
                             
                         } else {

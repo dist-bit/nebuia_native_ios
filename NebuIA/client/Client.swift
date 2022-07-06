@@ -117,7 +117,7 @@ public class Client {
     }
     
     func uploadID(front: UIImage, back: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)/id?report=\(report)")!
+        let url = URL(string: "\(base)/id/cropped/experimental?report=\(report)")!
         var request = URLRequest(url: url)
         
         guard let frontData = front.jpegData(compressionQuality: 75.0) else {
@@ -132,6 +132,7 @@ public class Client {
         // put images
         body.imageBody(image: frontData, boundary: boundary, filename: "front")
         body.imageBody(image: backData, boundary: boundary, filename: "back")
+        body.valueBody(key: "document", value: "id", boundary: boundary)
         body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
         
         request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)
@@ -156,7 +157,7 @@ public class Client {
     }
     
     func uploadID(front: UIImage, completion: @escaping (_ data: Any?, _ error: Error?)->()) {
-        let url = URL(string: "\(base)/id?report=\(report)")!
+        let url = URL(string: "\(base)/id/cropped/experimental?report=\(report)")!
         var request = URLRequest(url: url)
         
         guard let imageData = front.jpegData(compressionQuality: 75.0) else {
@@ -165,6 +166,7 @@ public class Client {
         
         var body = Data()
         body.imageBody(image: imageData, boundary: boundary, filename: "front")
+        body.valueBody(key: "document", value: "passport", boundary: boundary)
         body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
         
         request.file(apiKey: apiKey, apiSecret: apiSecret, code: code, boundary: boundary)

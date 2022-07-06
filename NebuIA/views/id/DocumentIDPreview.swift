@@ -143,9 +143,9 @@ public class PreviewDocumentIDController: UIViewController {
     
     private func buildImagePreview() {
         if(document.document_side == Side.FRONT) {
-            image_preview = UIImageView(image: document!.front_crop_image)
+            image_preview = UIImageView(image: document!.front_image)
         } else {
-            image_preview = UIImageView(image: document!.back_crop_image)
+            image_preview = UIImageView(image: document!.back_image)
         }
         image_preview.layer.cornerRadius =  10
         image_preview.clipsToBounds = true

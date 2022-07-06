@@ -110,9 +110,9 @@ public class UploadIDController: UIViewController {
     }
     
     private func buildImagePreview() {
-        image_preview_front = UIImageView(image: document!.front_crop_image)
-        if(document.back_crop_image != nil) {
-            image_preview_back = UIImageView(image: document!.back_crop_image)
+        image_preview_front = UIImageView(image: document!.front_image)
+        if(document.back_image != nil) {
+            image_preview_back = UIImageView(image: document!.back_image)
             image_preview_back.layer.cornerRadius =  10
             image_preview_back.clipsToBounds = true
         }
@@ -199,7 +199,7 @@ public class UploadIDController: UIViewController {
         // build preview document
         buildImagePreview()
         content_view.addSubview(image_preview_front)
-        if(document.back_crop_image != nil) {
+        if(document.back_image != nil) {
             content_view.addSubview(image_preview_back)
         }
         
@@ -233,10 +233,8 @@ public class UploadIDController: UIViewController {
             } else {
                 Vibration.error.vibrate()
                 self.status_button.backgroundColor = UIColor(rgb: 0xe74c3c)
-                if #available(iOS 13.0, *) {
-                    let btnImage = UIImage(systemName: "xmark")
-                    self.status_button.setImage(btnImage , for: .normal)
-                }
+                let btnImage = UIImage(systemName: "xmark")
+                self.status_button.setImage(btnImage , for: .normal)
                 self.description_label.text = "La subida de documentos no se pudo completar,\npor favor intentalo una vez mas"
                 self.summary_label.text = "Error al procesar tus documentos"
             }
@@ -249,7 +247,7 @@ public class UploadIDController: UIViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if(document.back_crop_image != nil) {
+        if(document.back_image != nil) {
             NebuIA.client.uploadID(front: document.front_image!, back: document.back_image!) { data, error in
                 if error != nil {
                     self.decodeResult(status: false)

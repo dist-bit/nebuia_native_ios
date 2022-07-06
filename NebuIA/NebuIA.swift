@@ -116,9 +116,10 @@ public class NebuIA {
         }
     }
     
-    public func faceProof(completion: (() -> Void)? = nil) {
+    public func faceProof(useIDShow: Bool, completion: (() -> Void)? = nil) {
         let faceController = FaceController()
         faceController.detector = detector
+        faceController.useIDShow = useIDShow
         faceController.onComplete = completion
         ctr.present(faceController, animated: true, completion: nil)
     }

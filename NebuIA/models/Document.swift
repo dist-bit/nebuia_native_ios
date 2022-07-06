@@ -13,8 +13,6 @@ enum Side {
 }
 
 public class Document {
-    var front_crop_image: UIImage?
-    var back_crop_image: UIImage?
     
     var front_image: UIImage?
     var back_image: UIImage?
@@ -25,27 +23,23 @@ public class Document {
     
     public func isComplete() -> Bool {
         if(current_type == "mx_passport_front") {
-            return front_crop_image != nil
+            return front_image != nil
         } else {
-            return front_crop_image != nil && back_crop_image != nil
+            return front_image != nil && back_image != nil
         }
     }
     
-    public func setImage(crop: UIImage, original: UIImage)  {
+    public func setImage(crop: UIImage)  {
         if(document_side == Side.FRONT) {
-            front_crop_image = crop
-            front_image = original
+            front_image = crop
         } else {
-            back_crop_image = crop
-            back_image = original
+            back_image = crop
         }
     }
     
     public func reset() {
         document_side = Side.FRONT
-        front_crop_image = nil
         front_image = nil
-        back_crop_image = nil
         back_image = nil
     }
 }

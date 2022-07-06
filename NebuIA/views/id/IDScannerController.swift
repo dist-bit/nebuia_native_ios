@@ -363,7 +363,7 @@ public class IDScannerController: UIViewController,  AVCaptureVideoDataOutputSam
     
     private func cropdocument(image: UIImage, detection: DetectionItem) {
         let crop = image.crop(rect: detection.rect())
-        self.document.setImage(crop: crop, original: image)
+        self.document.setImage(crop: crop)
         self.document.current_type = detection.label
         
         Vibration.success.vibrate()
